@@ -192,7 +192,7 @@
     var maxError=2;
 
 	var selectedRightColor = 0;
-	var totalRightColor;
+	var totalRightColor = 4;
     var totalRightColor2 = 4;
 
 	var maskSpriteArray  = new Array(4)
@@ -510,45 +510,52 @@ var index =0;
 
         var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
 
-        var oneColor = Math.floor(Math.random()*6);
-        var twoColor = Math.floor(Math.random()*7);
+//        var oneColor = Math.floor(Math.random()*6);
+//        var twoColor = Math.floor(Math.random()*7);
 
-        totalRightColor  = 12 - oneColor - twoColor;
+//        totalRightColor  = 12 - oneColor - twoColor;
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
 
         newRound = false;
+//		var chosenTiles = new Array();
+
+//		for(i=0;i<12;i++){
+//			if(i< totalRightColor){
+//                chosenTiles.push(roundColor);
+//            }else if (i<totalRightColor+oneColor){
+//                if(roundColor==0){
+//                    chosenTiles.push(1)
+//                }
+//                if(roundColor==1){
+//                    chosenTiles.push(0)
+//                }
+//                if(roundColor==2){
+//                    chosenTiles.push(1)
+//                }
+//            }else if (i>=totalRightColor+oneColor){
+//
+//                if(roundColor==0){
+//                    chosenTiles.push(2)
+//                }
+//                if(roundColor==1){
+//                    chosenTiles.push(2)
+//                }
+//                if(roundColor==2){
+//                    chosenTiles.push(0)
+//                }
+//            }
+//		}
+//
+
 		var chosenTiles = new Array();
 
 		for(i=0;i<12;i++){
-			if(i< totalRightColor){
-                chosenTiles.push(roundColor);
-            }else if (i<totalRightColor+oneColor){
-                if(roundColor==0){
-                    chosenTiles.push(1)
-                }
-                if(roundColor==1){
-                    chosenTiles.push(0)
-                }
-                if(roundColor==2){
-                    chosenTiles.push(1)
-                }
-            }else if (i>=totalRightColor+oneColor){
 
-                if(roundColor==0){
-                    chosenTiles.push(2)
-                }
-                if(roundColor==1){
-                    chosenTiles.push(2)
-                }
-                if(roundColor==2){
-                    chosenTiles.push(0)
-                }
-            }
+			chosenTiles[i] =  i%3;
+
 		}
-
-
 
 		// shuffle the chosen tiles
 		for(i=0;i<48;i++){
