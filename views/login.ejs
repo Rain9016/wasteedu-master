@@ -1,0 +1,165 @@
+<html>
+<head>
+	<meta name="viewport" content="user-scalable=no" />
+	<title> Login </title>
+	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
+
+	<style type="text/css">
+	.form-label{
+		text-align: right;
+		padding: 0px;
+	}
+	body{
+		background-color: #025b9e;
+	}
+	body .container{
+		margin-top: 30%;
+	}
+	.form-group label{
+		font-size: 30px;
+	}
+	.form-group input{
+		font-size: 30px;
+		height: 60px;
+	}
+	.col-sm-6 button{
+		height: 60px;
+		font-size: 20px;
+	}
+	</style>
+
+</head>
+<body>
+	<div class="container">
+
+		<div class="row" style="margin-top: 5%;margin-bottom: 5%;">
+			<div class="col-sm-12" style="text-align: center;">
+				<img src="public/imgs/logo.png">
+			</div>
+		</div>
+
+		<form action="/login" method="post">
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">User Name:</label>
+						<input type="text" id="username" name="username" class="form-control" placeholder="Alex666">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">Password:</label>
+						<input type="password" id="password" name="password" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="col-sm-6" style="padding-top: 2%;padding-left: 1%;padding-right: 1%;">
+						<button type="submit" class="btn btn-warning" style="width: 100%;" onclick="loginPage()">Login</button>
+					</div>
+			</form>
+					<div class="col-sm-6" style="padding-top: 2%;padding-right: 1%;padding-left: 1%;">
+						<button type="button" class="btn btn-success" style="width: 100%;" onclick="registerPage()">Register</button>
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8" style="padding-top: 2%;">
+					<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+
+	</div>
+
+	<script src="public/js/jquery.min.js"></script>
+	<script>
+
+	function registerPage(){
+		$(location).attr('href','/register');
+	}
+
+  window.fbAsyncInit = function() {
+  	FB.init({
+  	appId      : '646106995537624',
+    cookie     : true,  // enable cookies to allow the server to access the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+});
+
+  // Now that we've initialized the JavaScript SDK, we call
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  // FB.getLoginStatus(function(response) {
+  // 	statusChangeCallback(response);
+  // });
+
+	FB.getLoginStatus(function(response) {
+  		if (response.status === 'connected') {
+  			successRedirect(response);
+  		}
+  	});
+
+  FB.Event.subscribe('auth.login', function () {
+  	window.location = "/guide";
+  });
+
+};
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+  	var js, fjs = d.getElementsByTagName(s)[0];
+  	if (d.getElementById(id)) return;
+  	js = d.createElement(s); js.id = id;
+  	js.src = "//connect.facebook.net/en_US/sdk.js";
+  	fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function successRedirect(response) {
+  	console.log('Welcome!  Fetching your information.... ');
+
+  	FB.api('/me', function(response) {
+  		console.log('Successful login for: ' + response.id);
+  		$.ajax({
+  			type: 'POST',
+  			url: '/login',
+  			data: {accid: response.id, acctype: 'fb'},
+  			async: false
+  		});
+  		$( location ).attr("href", '/guide');
+  	});
+
+  }
+  </script>
+
+
+</body>
+</html>
