@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="format-detection" content="telephone=yes" />
+	<meta name="msapplication-tap-highlight" content="no" />
+
+	<title>pixi.js example 1</title>
+
+	<style>
+
+
+		@media screen and (min-width: 480px) {
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: red;
+			}
+
+		}
+		@media screen and (min-width: 600px) {
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: green;
+			}
+
+		}
+		@media screen and (min-width: 768px) {
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: black;
+			}
+
+		}
+		/*@media screen and (min-width: 910px) {*/
+			/*body {*/
+				/*margin: 0;*/
+				/*padding: 0;*/
+				/*background-color: darkslategray;*/
+			/*}*/
+
+		/*}*/
+
+		/*body {*/
+			/*margin: 0;*/
+			/*padding: 0;*/
+			/*background-color: darkslategray;*/
+		/*}*/
+
+		div.container {
+			margin: 0 auto;
+			width: 100%;
+		}
+		/*div.main {*/
+		/*width: 62.5%;*/
+		/*float: left;*/
+		/*}*/
+		/*div.aside {*/
+		/*width: 31.25%;*/
+		/*float: right;*/
+		/*}*/
+
+		/*.left{ width:200px; float:left;margin-right:-200px}*/
+
+		/*.main{ width:auto;margin:0 220px}*/
+
+		/*.right{ width:200px;margin-left:-200px; float:right}*/
+	</style>
+	<script src="javascripts/pixi.dev.js"></script>
+
+	<script>
+		alert(window.screen.width);
+	</script>
+</head>
+<body style="background-image: image('images/')">
+
+<!--<div class="container" style="background-color: red; height:80px">-->
+	<!--<div class = "left" style="background-color: yellow; height:80px"></div>-->
+	<!--<div class="main" style="background-color: blue;height: 80px"></div>-->
+	<!--<div class="right" style="background-color: green;height: 80px"></div>-->
+<!--</div>-->
+<!--<script>-->
+<!--// first tile picked up by the player-->
+<!--var firstTile=null;-->
+<!--// second tile picked up by the player-->
+<!--var secondTile=null;-->
+<!--// can the player pick up a tile?-->
+<!--var canPick=true;-->
+<!--// create an new instance of a pixi stage with a grey background-->
+<!--var stage = new PIXI.Stage(0x888888);-->
+<!--// create a renderer instance width=640 height=480-->
+<!--var renderer = PIXI.autoDetectRenderer(640,480);-->
+<!--// importing a texture atlas created with texturepacker-->
+<!--var tileAtlas = ["javascripts/images.json"];-->
+<!--// create a new loader-->
+<!--var loader = new PIXI.AssetLoader(tileAtlas);-->
+<!--// create an empty container-->
+<!--var gameContainer = new PIXI.DisplayObjectContainer();-->
+<!--// add the container to the stage-->
+<!--stage.addChild(gameContainer);-->
+<!--// add the renderer view element to the DOM-->
+<!--document.body.appendChild(renderer.view);-->
+<!--// use callback-->
+<!--loader.onComplete = onTilesLoaded-->
+<!--//begin load-->
+<!--loader.load();	-->
+<!--function onTilesLoaded(){-->
+<!--// choose 24 random tile images-->
+<!--var chosenTiles=new Array();-->
+<!--var numb =0;-->
+<!--while(chosenTiles.length<12){-->
+<!--chosenTiles.push(Math.floor(numb/4));				-->
+<!--numb++;-->
+<!--}-->
+<!--// shuffle the chosen tiles-->
+<!--for(i=0;i<96;i++){-->
+<!--var from = Math.floor(Math.random()*12);-->
+<!--var to = Math.floor(Math.random()*12);-->
+<!--var tmp = chosenTiles[from];-->
+<!--chosenTiles[from]=chosenTiles[to];-->
+<!--chosenTiles[to]=tmp;-->
+<!--}-->
+<!--alert(chosenTiles);-->
+<!--// place down tiles-->
+<!--for(i=0;i<3;i++){    // i colum-->
+<!--for(j=0;j<4;j++){    // j  row-->
+<!--// new sprite-->
+<!--var tile = PIXI.Sprite.fromFrame(chosenTiles[i*4+j]);-->
+<!--// buttonmode+interactive = acts like a button-->
+<!--tile.buttonMode=true;-->
+<!--tile.interactive = true;-->
+<!--// is the tile selected?-->
+<!--tile.isSelected=false;-->
+<!--// set a tile value-->
+<!--tile.theVal=chosenTiles[i*4+j]-->
+<!--// place the tile-->
+<!--tile.position.x = 7+i*80;-->
+<!--tile.position.y = 7+  j*80;-->
+<!--// paint tile black-->
+<!--tile.tint = 0x000000;-->
+<!--// set it a bit transparent (it will look grey)-->
+<!--tile.alpha=0.5;-->
+<!--// add the tile-->
+<!--gameContainer.addChild(tile);-->
+<!---->
+<!---->
+<!--// mouse-touch listener-->
+<!--tile.mousedown = tile.touchstart = function(data){-->
+<!--// can I pick a tile?-->
+<!--if(canPick) {-->
+<!--// is the tile already selected?-->
+<!--if(!this.isSelected){-->
+<!--// set the tile to selected-->
+<!--this.isSelected = true;-->
+<!--// show the tile-->
+<!--this.tint = 0xffffff;-->
+<!--this.alpha = 1;-->
+<!--// is it the first tile we uncover?-->
+<!--if(firstTile==null){-->
+<!--firstTile=this-->
+<!--}-->
+<!--// this is the second tile-->
+<!--else{-->
+<!--secondTile=this-->
+<!--// can't pick anymore-->
+<!--canPick=false;-->
+<!--// did we pick the same tiles?-->
+<!--if(firstTile.theVal==secondTile.theVal){-->
+<!--// wait a second then remove the tiles and make the player able to pick again-->
+<!--setTimeout(function(){-->
+<!--gameContainer.removeChild(firstTile);-->
+<!--gameContainer.removeChild(secondTile);-->
+<!--firstTile=null;-->
+<!--secondTile=null;-->
+<!--canPick=true;-->
+<!--},1000);-->
+<!--}-->
+<!--// we picked different tiles-->
+<!--else{-->
+<!--// wait a second then cover the tiles and make the player able to pick again-->
+<!--setTimeout(function(){-->
+<!--firstTile.isSelected=false-->
+<!--secondTile.isSelected=false-->
+<!--firstTile.tint = 0x000000;-->
+<!--secondTile.tint = 0x000000;-->
+<!--firstTile.alpha=0.5;-->
+<!--secondTile.alpha=0.5;-->
+<!--firstTile=null;-->
+<!--secondTile=null;-->
+<!--canPick=true	-->
+<!--},1000);-->
+<!--}-->
+<!--}	-->
+<!--}-->
+<!--}-->
+<!--}-->
+<!--}-->
+<!--} -->
+<!--requestAnimFrame(animate);-->
+<!--}-->
+<!--function animate() {-->
+<!--requestAnimFrame(animate);-->
+<!--renderer.render(stage);-->
+<!--}-->
+<!--</script>-->
+</body>
+</html>
