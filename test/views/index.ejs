@@ -102,17 +102,6 @@
 	</script>
 </head>
 <body>
-<audio id='bg-sound'>
-<source src='sounds/soundtrack.mp3' type='audio/mp3'>
-</audio>
-
-<audio id='rtClick-sound' >
-<source src='sounds/plop.mp3' type='audio/mp3'>
-</audio>
-
-<audio id='wrClick-sound' >
-    <source src='sounds/plop.mp3' type='audio/mp3'>
-</audio>
 <div>
 <div id="container" ><div id="output"></div></div>
 <ul class="color">
@@ -122,22 +111,55 @@
 <li></li>
 </ul>
 </div>
-<div id ="bgdiv" style="position: absolute; width:100%;height:100%;"></div>
+<div style="position: relative;">
+<div id ="bgdiv" style="position: absolute; width:100%;height:100%"></div>
 
-<div id = 'gamediv'style="position: relative;"></div>
+<div id = 'gamediv'style="position: absolute;"></div>
+<div id = 'introResultdiv'style="position: absolute;background-color: #e5004f; opacity: 0.95"></div>
+</div>
 
-
+<audio id="bgmusic" src="sounds/bgmusic.mp3" loop="loop"></audio>
 <script>
+	PIXI.loader.add("jsons/wasteicon.json").load(finishLoad);
 
-    var   levelUp_sound=  new Audio("sounds/levelUp.mp3");
+
+	//------------------------------------------------------------------------------------------------------------------------------ sound play
+
+
+
+
+
+	var backGround_sound = new Audio("sounds/bgmusic.mp3");
+
+
+		document.getElementById('bgmusic').play();
+
+
+//	$('html').on('touchstart',function(){
+//		backGround_sound.play();
+//	});
+
+
+	var backGround_sound = new Audio("sounds/bgmusic.mp3");
+	backGround_sound.loop = true;
+	backGround_sound.volume = 0.1;
+    var levelUp_sound=  new Audio("sounds/levelUp.mp3");
     var newRound_sound =  new Audio("sounds/newRound.mp3");
-    var rtClick_sound = new Audio("sounds/rtClick.wav");
+    var rtClick_sound = new Audio("sounds/rtClick.mp3");
 //    var wrClick_sound = new Audio("sounds/wrClick.mp3");
     var wrClick_sound = new Audio("sounds/wrClick.mp3");
-    wrClick_sound.autoPlay = true;
-    var backGround_sound = new Audio("sounds/backGround.mp3");
+
+	var countDown_sound = new Audio("sounds/cound_down.mp3");
 
 
+	var introResultstage = new PIXI.Container();
+	var  introResultdivrendergraphics = new PIXI.Graphics();
+	var introResultdivrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true});
+	introResultstage.addChild(introResultdivrendergraphics);
+	document.getElementById('introResultdiv').appendChild(introResultdivrenderer.view);
+	introResultdivrenderer.render(introResultstage);
+
+	var bgstage = new PIXI.Container();
     var newlevel  = true;
     var level = 1;
     var newRound = false;
@@ -150,8 +172,6 @@
 
     document.getElementById('bgdiv').appendChild(bgrenderer.view);
 
-    var bgstage = new PIXI.Container();
-
     var coinLogoPic = PIXI.Sprite.fromImage("images/logo-nobg.png");
 
     var coinLogoPic2 = PIXI.Sprite.fromImage("images/logo-nobg.png");
@@ -162,13 +182,19 @@
     coinLogoPic.position.x = window.innerWidth/2+700;
     coinLogoPic.position.y = window.innerHeight/2+190;
 
-
+	coinLogoPic.scale.set(0.9);
     coinLogoPic2.position.x = -200;
     coinLogoPic2.position.y = window.innerHeight/2+190;
 
 
+	coinLogoPic2.scale.set(0.9);
+
     // let's create a moving shape
     var bggraph = new PIXI.Graphics();
+
+	var intropagegraphic = new PIXI.Graphics();
+
+
 
 //    bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+190);
 //    bggraph.beginFill(0xfffff,0.2);
@@ -178,8 +204,9 @@
 //    bggraph.endFill();
 
 
-    bgstage.addChild(coinLogoPic);
-    bgstage.addChild(coinLogoPic2);
+//    bgstage.addChild(coinLogoPic);
+//    bgstage.addChild(coinLogoPic2);
+	bgstage.addChild(intropagegraphic);
     bgstage.addChild(bggraph);
     bgrenderer.render(bgstage);
 
@@ -217,6 +244,13 @@
 
 	var wasteCollection  =[[0,'images/plastic_bottle_empty.png','Plastic Bottle'],[1,'images/plastic_bag.png','Plastic Bag'],[2,'images/appple_core.png','Apple Core']]
 
+
+
+
+
+	function finishLoad(){
+//		backGround_sound.play();
+	}
 
 	var wasteCollectionOrder  = new Array(wasteCollection.length);
 
@@ -420,6 +454,19 @@
         wordWrapWidth : 440
     };
 
+ var introstyle = {
+        font : 'bold italic 60px Arial',
+        fill : '#F7EDCA',
+//        stroke : '#4a1850',
+//        strokeThickness : 5,
+//        dropShadow : true,
+//        dropShadowColor : '#000000',
+//        dropShadowAngle : Math.PI / 6,
+//        dropShadowDistance : 6,
+        wordWrap : true,
+        wordWrapWidth : 440
+    };
+
     var richText = new PIXI.Text('3',style);
     richText.anchor.x = 0.5;
     richText.anchor.y = 0.5;
@@ -478,6 +525,8 @@ var index =0;
     var wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
 
 
+
+
     var wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
 
     var right
@@ -494,6 +543,7 @@ var index =0;
         wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
         wastePic.anchor.x =0.5;
         wastePic.anchor.y =0.5;
+		wastePic.scale.set(1.1);
 
 //	wastePic.scale = 1;
 
@@ -684,9 +734,9 @@ var index =0;
 
 							var texture = PIXI.Texture.fromImage('images/'+(selectedTile.theVal + 3)+'.png');
 
-                            wrClick_sound.play();
+//                            wrClick_sound.play();
 
-
+//							backGround_sound.play();
 
 							selectedTile.setTexture(texture);
 
@@ -918,7 +968,9 @@ var index =0;
 
 
     //----------------------------------------------------------------------------------------------------------------------- level2 countdown
-    var second= 8;
+
+
+    var second= 4;
     var timer;
     function countdown5seconds()
     {
@@ -935,8 +987,9 @@ var index =0;
             richText.text = "According to the waste";
         }
         else if (second>0&&second<=3){
-            richText.setStyle(style2);
-            richText.text = "Choose all right color blocs!"
+			countDown_sound.play();
+            richText.setStyle(style);
+            richText.text = second;
             timer = setTimeout('countdown5seconds()',1000);
         }else if (second == 0)
         {
@@ -1045,14 +1098,32 @@ var index =0;
 //	//stage.addChild(bgPic);
 //    roundTimer = roundTimerChecker('roundTimerChecker()',1000);
 
+
+
+	var intropage = PIXI.Sprite.fromImage("images/game1level1intro.png");
+
+
+	intropage.anchor.set(0.5);
+	intropage.x = window.innerWidth/2;
+	intropage.y = window.innerHeight/2;
+	intropage.scale.set(1.3);
+
+	intropage.buttonMode = true;
+	intropage.interactive = true;
+	var intropageshow = true;
 	var rottimes = -10;
 	var isReverse = false;
-    var circlecount =0.1;
+    var circlecount =0;
+	var isskip = false;
+	var isbackGroundsoundplay = true;
+
+//	var time1 = new date();
 	renderer.render(stage);
 						var count = 0;
 						animate();
 						function animate() {
 
+							if(!intropageshow&&isskip){
 
                             if (level == 1) {
                                 if(newlevel){
@@ -1091,12 +1162,60 @@ var index =0;
                                 }
                             }
 
+							}
+
+							introResultdivrendergraphics.clear();
+
+
+
+							if(intropageshow){
+								if( Math.sin(circlecount)* 2000>700){
+									intropageshow= false;
+
+									intropage.mousedown = intropage.touchstart = function (data) {
+
+
+
+
+										setTimeout(function () {
+											backGround_sound.play();
+//											countDown_sound.play();
+											alert('d');
+
+										}, 1000);
+
+
+										introResultstage.removeChild(intropage);
+										document.getElementById('introResultdiv').style.display="none";
+										intropageshow = false;
+										isskip  = true;
+										introResultdivrenderer.render(introResultstage);
+									}
+									introResultstage.addChild(intropage);
+									introResultdivrenderer.render(introResultstage);
+
+
+								}
+								introResultdivrendergraphics.beginFill(0x0598f2,0.85);
+//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
+								introResultdivrendergraphics.drawCircle(-20,0, Math.sin(circlecount)* 1500);
+								introResultdivrendergraphics.endFill();
+								introResultdivrendergraphics.beginFill(0x00306f,0.95);
+								introResultdivrendergraphics.drawCircle(window.innerWidth+150,window.innerHeight - 200,Math.sin(circlecount*1.5)* 2600);
+	//							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
+								introResultdivrendergraphics.endFill();
+
+								introResultdivrenderer.render(introResultstage);
+
+							}
+
+
 
 
                             circlecount+=0.1;
                             bggraph.clear();
 
-                            bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
+							bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
 //                            bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+200);
                             bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 430+ Math.cos(circlecount)* 10);
                             bggraph.endFill();

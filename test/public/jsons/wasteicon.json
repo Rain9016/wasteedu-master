@@ -1,0 +1,18 @@
+{
+  "Plastic Bottle": "images/plastic_bottle_empty.png",
+  "Plastic Bag": "images/plastic_bag.png",
+  "Apple Core": "images/appple_core.png",
+  "color block1": "images/1.png",
+  "color block2": "images/2.png",
+  "color block3": "images/3.png",
+  "color block4": "images/4.png",
+  "color block5": "images/5.png",
+  "color block6": "images/6.png",
+  "color block7": "images/7.png",
+  "color block8": "images/8.png",
+  "wrong click sound": "sounds/wrClick.mp3",
+  "right click sound": "sounds/rtClick.mp3",
+  "count down sound": "sounds/cound_down.mp3",
+ "back ground sound": "sounds/backGround_sound.mp3"
+
+}
