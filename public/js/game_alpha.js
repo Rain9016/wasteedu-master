@@ -13,20 +13,20 @@ var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight)
 renderer.backgroundColor = 0x00a0e4;
 
 // The renderer will create a canvas element for you that you can then insert into the DOM.
-document.body.appendChild(renderer.view);
+//document.body.appendChild(renderer.view);
+document.getElementById('test').appendChild(renderer.view);
 
 // You need to create a root container that will hold the scene you want to draw.
 var stage = new PIXI.Container();
 
 var graphics = new PIXI.Graphics();
 
-
-
 var totalWidth = objectNumber*objectWidth+(objectNumber+1)*offset;
 
 // Position of the inside window
 var startX = (window.innerWidth-totalWidth)/2;
 var startY = (window.innerHeight-totalWidth)/2;
+
 
 // Initial position
 graphics.moveTo(startX, startY);
