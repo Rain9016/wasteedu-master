@@ -26,6 +26,14 @@
 		height: 60px;
 		font-size: 20px;
 	}
+
+	#skip{
+		width: 10%;
+		background: none;
+		color: #ececec;
+		font-size: 150%;
+		font-weight: bolder;
+	}
 	</style>
 
 </head>
@@ -78,15 +86,18 @@
 			</div>
 
 			<div class="row">
+				<div class="col-sm-12" style="text-align: center;">
+					<button type="button" class="btn btn-skip" id="skip" onclick="skip()">skip</button>
+				</div>
+			</div>
+
+			<div class="row">
 				<div class="col-sm-2"></div>
 				<div class="col-sm-8" style="padding-top: 2%;">
 					<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
 				</div>
 				<div class="col-sm-2"></div>
 			</div>
-
-
-
 	</div>
 
 	<script src="public/js/jquery.min.js"></script>
@@ -94,6 +105,10 @@
 
 	function registerPage(){
 		$(location).attr('href','/register');
+	}
+
+	function skip() {
+		window.location.assign('/guide');
 	}
 
   window.fbAsyncInit = function() {
