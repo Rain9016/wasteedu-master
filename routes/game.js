@@ -26,4 +26,9 @@ router.get("/match_color", function(req,res){
 	console.log('enter match_color page...')
 });
 
+router.get("/container_sort", function(req,res){
+	res.render('container_sort.ejs');
+	console.log('enter container_sort page...')
+});
+
 module.exports = router;
