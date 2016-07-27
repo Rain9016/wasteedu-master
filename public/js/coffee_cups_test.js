@@ -43,7 +43,7 @@ var startY = (window.innerHeight-totalWidth)/2;
 // Initial position
 graphics.moveTo(startX, startY);
 
-function drawbackground() {
+function Drawbackground() {
 
     // set background's color
     renderer.backgroundColor = 0x00a0e4;
@@ -56,7 +56,7 @@ function drawbackground() {
     stage.addChild(graphics);
 }
 
-function drawcups(NumberOfCups) {
+function Drawcups(NumberOfCups) {
 
     var cups = NumberOfCups;
     var DynamicWidth = cups*objectWidth+(cups+1)*offset; // a total width of cups depending on how many of them
@@ -133,19 +133,59 @@ function DrawSocreBoard() {
     scoreText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
 
     stage.addChild(scorelabelText);
-
     stage.addChild(scoreText);
 
+}
+
+function DrawTimeBoard() {
+
+    var style = {
+        font : '30px Arial',
+        fill : 0xFFFFFF,
+        align : 'center'
+    };
+
+    var TimelabelText = new PIXI.Text('Time:', style);
+    var TimeText = new PIXI.Text(totalTime, style);
+
+    TimelabelText.position.x = objectWidth/2;
+    TimelabelText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
+
+    TimeText.position.x = objectWidth/2+TimelabelText.width+offset;
+    TimeText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
+
+    stage.addChild(TimelabelText);
+    stage.addChild(TimeText);
+}
+
+function DrawName() {
+
+    var style = {
+        font : '70px Arial',
+        fill : 0xFFFFFF,
+        align : 'center',
+    };
+
+    var GameNameText = new PIXI.Text('Coffee Cup Sort', style);
+
+    GameNameText.x = objectWidth/2+offset;
+    GameNameText.y = startY/3-objectWidth+window.innerHeight/14;
+
+    stage.addChild(GameNameText);
 }
 
 
 function animate() {
 
-    drawbackground();
+    Drawbackground();
 
-    drawcups(2);
+    Drawcups(2);
 
     DrawSocreBoard();
+
+    DrawTimeBoard();
+
+    DrawName();
 
     requestAnimationFrame(animate);
 
