@@ -22,7 +22,11 @@ var objectWidth = 135;
 var preClick;
 var clickCount = 0;
 
-// Prelaod the cups and bins
+// Timer and Score
+var totalTime = 0;
+var totalScore = 0;
+
+// Preload the cups and bins
 var resourcePath = "public/imgs/";
 var textureArray = [['material1', resourcePath+'g1.png'], ['material2', resourcePath+'g2.png']];
 var textureRubArray = [['material3', resourcePath+'g3.png'], ['material4', resourcePath+'g4.png']];
@@ -48,6 +52,8 @@ function drawbackground() {
     graphics.beginFill(0x00235d);
     graphics.drawRect(0, startY/2-objectWidth, window.innerWidth, window.innerHeight/7, 0);
     graphics.endFill();
+
+    stage.addChild(graphics);
 }
 
 function drawcups(NumberOfCups) {
@@ -106,6 +112,30 @@ function drawcups(NumberOfCups) {
     }
     graphics.endFill();
 
+    stage.addChild(graphics);
+}
+
+function DrawSocreBoard() {
+
+    var lablestyle = {
+        font : '30px Arial',
+        fill : 0xFFFFFF,
+        align : 'center'
+    };
+
+    var scorelabelText = new PIXI.Text('Score:', lablestyle);
+    var scoreText = new PIXI.Text(totalScore, lablestyle);
+
+    scorelabelText.position.x = offset+3 * objectWidth;
+    scorelabelText.position.y = startY/2 -objectWidth + window.innerHeight*2/21 +window.innerHeight/63;
+
+    scoreText.position.x = offset+3*objectWidth + scorelabelText.width + offset;
+    scoreText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
+
+    stage.addChild(scorelabelText);
+
+    stage.addChild(scoreText);
+
 }
 
 
@@ -115,7 +145,7 @@ function animate() {
 
     drawcups(2);
 
-    stage.addChild(graphics);
+    DrawSocreBoard();
 
     requestAnimationFrame(animate);
 
