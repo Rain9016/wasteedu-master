@@ -1207,14 +1207,14 @@
                 if(isgameover==true){
                     circlecount = 0;
                     backGround_sound.pause();
-
+                    startshowcount = 0;
                     document.getElementById('introResultdiv').style.display = "block";
 
                     introResultstage.addChild(introResultdivrendergraphics);
 
+                    renderer.render(stage);
+
                 }else {
-
-
                     canPick = false;
                     circlecount = 0;
                     round = 0;
