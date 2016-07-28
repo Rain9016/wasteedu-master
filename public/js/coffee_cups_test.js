@@ -10,6 +10,28 @@ var stage = new PIXI.Container();
 // create the graphics objects for drawing primitive shapes
 var graphics = new PIXI.Graphics();
 
+// create a generic resource loader
+var loader = new PIXI.loaders.Loader();
+
+// load the resources of cups and bins
+var resourcePath = "public/imgs/";
+var CupsTexture = [['cup1', resourcePath+'g1.png'], ['cup2', resourcePath+'g2.png']];
+var BinsTexture = [['bin1', resourcePath+'g3.png'], ['bin2', resourcePath+'g4.png']];
+for (var i = 0; i < CupsTexture.length; i++) {
+    loader.add(CupsTexture[i][0], CupsTexture[i][1]);
+    loader.add(BinsTexture[i][0], BinsTexture[i][1]);
+    console.log(CupsTexture[i][0]);
+    console.log(CupsTexture[i][1]);
+    console.log(BinsTexture[i][0]);
+    console.log(BinsTexture[i][1]);
+};
+
+var TotalCups = 6;
+var clickCupsObj = [];
+var res = GenerateRandomTexture(TotalCups);
+console.log(res);
+clickCupsObj = res.CupsObj;
+
 // Offset of each block
 var offset = 35;
 
@@ -25,15 +47,6 @@ var clickCount = 0;
 // Timer and Score
 var totalTime = 0;
 var totalScore = 0;
-
-// Preload the cups and bins
-var resourcePath = "public/imgs/";
-var textureArray = [['material1', resourcePath+'g1.png'], ['material2', resourcePath+'g2.png']];
-var textureRubArray = [['material3', resourcePath+'g3.png'], ['material4', resourcePath+'g4.png']];
-
-for (var i = 0; i < textureArray.length; i++) {
-    PIXI.loader.add(textureArray[i][0], textureArray[i][1]);
-};
 
 // Position of the inside window
 var totalWidth = MaxCups*objectWidth+(MaxCups+1)*offset;
@@ -54,6 +67,36 @@ function Drawbackground() {
     graphics.endFill();
 
     stage.addChild(graphics);
+}
+
+function GenerateRandomTexture(cups) {
+
+    var Objs = [];
+    var Values = [];
+    var res  = {};
+    var rate = 0.5;
+
+    for(var i = 0; i < cups; i++) {
+
+        var random = Math.random();
+
+        if (random < rate) {
+            random = 1;
+        } else {
+            random = 0;
+        }
+
+        var cups_temp = new PIXI.Sprite.fromImage(CupsTexture[random][1]);
+        var bins_temp = new PIXI.Sprite.fromImage(BinsTexture[random][1]);
+
+        Objs.push(cups_temp);
+        Values.push(random);
+        Objs.push(bins_temp);
+        Values.push(random);
+    }
+    res.objs = Objs;
+    res.values = Values;
+    return res;
 }
 
 function Drawcups(NumberOfCups) {
@@ -82,7 +125,7 @@ function Drawcups(NumberOfCups) {
     var SecondInsideheight = objectWidth;
 
     if(cups < MinCups || cups > MaxCups) {
-        console.error("invalidate the number of cups");
+        throw new Error("invalidate the number of cups");
     } else {
         if(cups == 2) {
             DynamicY = 0;
@@ -106,13 +149,44 @@ function Drawcups(NumberOfCups) {
     for (var i = 0; i < cups * 2; i++){
         if(i % 2 == 0){
             graphics.drawRoundedRect(FirstInsideX, (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
+
+    /*        loader.load(function (loader,resources) {
+                res.objs[i].x = startX+offset*2+objectWidth*1;
+                res.objs[i].y = (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY;
+                stage.addChild(res.objs[i]);
+            });*/
+
         }else{
             graphics.drawRoundedRect(SecondInsideX, (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+
+    /*        loader.load(function (loader,resources) {
+                res.objs[i].x = SecondInsideX;
+                res.objs[i].y = (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY
+                stage.addChild(res.objs[i]);
+            });*/
         }
     }
     graphics.endFill();
 
     stage.addChild(graphics);
+
+    loader.load(function (loader, resources) {
+        console.log("LOADER");
+        //Set up Cups & Bins textures position
+        for (var i = 0; i < cups * 2; i++ ) {
+            if(i % 2 == 0 ) {
+                res.objs[i].x = startX+offset*2+objectWidth*1;
+                res.objs[i].y = (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY;
+                stage.addChild(res.objs[i]);
+
+            } else {
+                res.objs[i].x = SecondInsideX;
+                res.objs[i].y = (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY
+                stage.addChild(res.objs[i]);
+            }
+        }
+
+    });
 }
 
 function DrawSocreBoard() {
@@ -174,12 +248,20 @@ function DrawName() {
     stage.addChild(GameNameText);
 }
 
-
 function animate() {
+    requestAnimationFrame(animate);
+
+    // render the container
+    renderer.render(stage);
+}
+
+
+
+function DrawThemes() {
 
     Drawbackground();
 
-    Drawcups(2);
+    Drawcups(TotalCups);
 
     DrawSocreBoard();
 
@@ -187,11 +269,9 @@ function animate() {
 
     DrawName();
 
-    requestAnimationFrame(animate);
-
     // render the container
     renderer.render(stage);
 }
 
-// start animating
+DrawThemes();
 animate();
