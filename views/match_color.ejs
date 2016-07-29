@@ -128,15 +128,6 @@
 
     var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
 
-
-    document.getElementById('bgmusic').play();
-
-
-    //	$('html').on('touchstart',function(){
-    //		backGround_sound.play();
-    //	});
-
-
     var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
     backGround_sound.loop = true;
     backGround_sound.volume = 0.1;
@@ -186,27 +177,11 @@
     coinLogoPic2.position.x = -200;
     coinLogoPic2.position.y = window.innerHeight/2+190;
 
-
     coinLogoPic2.scale.set(0.9);
 
     // let's create a moving shape
     var bggraph = new PIXI.Graphics();
 
-    var intropagegraphic = new PIXI.Graphics();
-
-
-
-    //    bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+190);
-    //    bggraph.beginFill(0xfffff,0.2);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,400);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,350);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,300);
-    //    bggraph.endFill();
-
-
-    //    bgstage.addChild(coinLogoPic);
-    //    bgstage.addChild(coinLogoPic2);
-    bgstage.addChild(intropagegraphic);
     bgstage.addChild(bggraph);
     bgrenderer.render(bgstage);
 
@@ -222,43 +197,28 @@
     var totalRightColor = 4;
     var totalRightColor2 = 4;
 
-    var maskSpriteArray  = new Array(4)
+//---------------------------------------------------------------------------- waste pic
 
-
-    for(var i =0; i< maskSpriteArray.length; i++){
-        maskSpriteArray[i] = new Array(3);
-    };
-
-    //	for(var i =0;i<12;i++){
-    //
-    //		var tempsprit = new PIXI.Sprite();
-    //		tempsprit.tint = 0x000000;
-    //		tempsprit.height = window.innerWidth/5.2;
-    //		tempsprit.width = tempsprit.height;
-    //		maskSpriteArray.push();
-    //
-    //	}
-
-    //---------------------------------------------------------------------------- waste pic
-
-
+// the total waste types&&icons
     var wasteCollection  =[[0,'public/imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'public/imgs/game1/plastic_bag.png','Plastic Bag'],[2,'public/imgs/game1/appple_core.png','Apple Core']]
 
 
 
-
-
     function finishLoad(){
-//		backGround_sound.play();
+     //some function after the web has been loaded
     }
 
+
+
+
+//---------------------------------------------------------------------------- random the waste the order
     var wasteCollectionOrder  = new Array(wasteCollection.length);
 
     for(var i =0;i<wasteCollection.length; i++)
     {
         wasteCollectionOrder[i] = i;
     }
-
+    // shuffle the waste order
 
     for(i=0;i<48;i++){
         var from = Math.floor(Math.random()*3);
@@ -270,7 +230,7 @@
 
 
 
-    //---------------------------------------------------------------------------- radom the colors
+    //---------------------------------------------------------------------------- random the colors
 
     var chosenTiles = new Array();
 
@@ -288,24 +248,7 @@
         chosenTiles[to]=tmp;
     }
 
-
-    for(var i =0; i <12;i++){
-
-        var tempSprite = new  PIXI.Sprite();
-        tempSprite.height = window.innerWidth/5.2;
-        tempSprite.width = tempSprite.height;
-        if(chosenTiles[i]==0){                    // yellow
-            tempSprite.tint = 0xeee570;
-        }else if (chosenTiles[i]==1){            // greeen
-            tempSprite.tint = 0x2cc26f;
-        }else if(chosenTiles[i]==2){
-            tempSprite.tint = 0xff0000;          // red
-        };
-        maskSpriteArray[Math.floor(i/3)][Math.floor(i%3)] = tempSprite;
-    }
-
-
-    //---------------------------------------------------------------------------- waste pic
+    //---------------------------------------------------------------------------- backgroud coin pic
 
     var bgPic = PIXI.Sprite.fromImage('public/imgs/game1/logo-nobg.png');
     bgPic.anchor.set(0.5);
@@ -351,7 +294,7 @@
 
     graphics.moveTo(wastelabelboardZoonstartX, wastelabelboardZoonstartY);
     graphics.beginFill(0x002866,0.9);
-    graphics.drawRoundedRect(wastelabelboardZoonstartX, wastelabelboardZoonstartY, wastelabelboardWidth, wastelabelboardHight, 10);
+    graphics.drawRect(wastelabelboardZoonstartX, wastelabelboardZoonstartY, wastelabelboardWidth, wastelabelboardHight, 10);
     graphics.endFill();
 
     //------------------------------------------------------------------------------ gameZone
@@ -386,8 +329,6 @@
     graphics.drawRect(timescoreBarX, timescoreBarY, timescoreBarWidth, timescoreBarHigh);
 
     graphics.endFill();
-
-
 
 
     //------------------------------------------------------------------------------ waste board
@@ -488,39 +429,7 @@
     richText.alpha = 0.9;
 
 
-
-    //    var second=5;
-    //    var timer;
-    //    function countdown5seconds()
-    //    {
-    //        second--;
-    //
-    //        if(second>=1)
-    //        {
-    //            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
-    //            richText.text = second;
-    //        }
-    //        else if (second == 0){
-    //
-    //            richText.text = "Start!"
-    //            timer = setTimeout('countdown5seconds()',1000);
-    //        }
-    //        else if (second < 0)
-    //        {
-    //
-    //            stage.removeChild(richText);
-    //            canPick = true;
-    //            clearTimeout(timer);
-    //        }
-    //    }
-    //
-    //    timer = countdown5seconds('countdown5seconds()',1000);
-
-
     //----------------------------------------------------------------------------------place mask
-
-
-    var gamecontianer = new PIXI.Container();
 
     var canPick = false;
 
@@ -546,6 +455,8 @@
 
     var startshowcount =0;
 
+
+    // initial first intropage
     var intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level1intro.png");
 
     intropage.alpha= 0;
@@ -557,24 +468,31 @@
     intropage.buttonMode = true;
     intropage.interactive = true;
 
+
+
     var intropageshow = true;
     var rottimes = -10;
     var isReverse = false;
-
+    // whether skip the the intro page
     var isskip = false;
+    // whether show the start page
     var isstartshow = false;
+    // whether the game is start
     var isgamesatrt = false;
-    var isbackGroundsoundplay = true;
-    var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
 
+    var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
+    // game page
     var gameTime = 60;
+    // game time text
     countingText.text = 'Time Left: ' + Math.floor(gameTime);
     stage.addChild(richText);
+
+    // level1 start countdown seconds
     var second= 4;
     var timer;
     var circlecount = 0;
     var gameTimer;
-
+    // level2 start countdown seconds
     var second2 = 4;
     var timer2;
 
@@ -606,46 +524,9 @@
 
         var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
 
-//        var oneColor = Math.floor(Math.random()*6);
-//        var twoColor = Math.floor(Math.random()*7);
-
-//        totalRightColor  = 12 - oneColor - twoColor;
-
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
-
-
-
         newRound = false;
-//		var chosenTiles = new Array();
-
-//		for(i=0;i<12;i++){
-//			if(i< totalRightColor){
-//                chosenTiles.push(roundColor);
-//            }else if (i<totalRightColor+oneColor){
-//                if(roundColor==0){
-//                    chosenTiles.push(1)
-//                }
-//                if(roundColor==1){
-//                    chosenTiles.push(0)
-//                }
-//                if(roundColor==2){
-//                    chosenTiles.push(1)
-//                }
-//            }else if (i>=totalRightColor+oneColor){
-//
-//                if(roundColor==0){
-//                    chosenTiles.push(2)
-//                }
-//                if(roundColor==1){
-//                    chosenTiles.push(2)
-//                }
-//                if(roundColor==2){
-//                    chosenTiles.push(0)
-//                }
-//            }
-//		}
-//
 
         var chosenTiles = new Array();
 
@@ -666,7 +547,6 @@
 
         for (var j = 0; j <= 3; j++) {
             for (var i = 0; i < 3; i++) {
-
 
                 var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
 
@@ -697,7 +577,6 @@
                     // can I pick a tile?
                     if (canPick) {
 
-
                         if (!this.isSelected) {
 
 //						alert(this.theVal);
@@ -708,12 +587,7 @@
                             this.tint = 0xffffff;
                             this.alpha = 1;
 
-
-
                             if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
-
-
-
 
                                 var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
@@ -722,7 +596,6 @@
 
                                 totalScore += 20;
                                 totalScoreText.text =  'Total Score: '+ totalScore;
-//							alert('pick red right!');
 
                                 selectedRightColor++;
                                 if (selectedRightColor != totalRightColor) {
@@ -730,63 +603,29 @@
                                     rtClick_sound.play();
                                 }
 
-//
-//                            alert('selectedRightColor '+selectedRightColor);
-
-//                            alert('totalRightColor '+totalRightColor);
-
-
                                 if (selectedRightColor == totalRightColor) {
-
-
 
                                     newRound_sound.play();
                                     selectedRightColor = 0;
                                     canPick= false;
 
                                     totlalError = 0;
-                                    richText.text = "Next roud!"
-
-                                    stage.addChild(richText);
 
                                     newRound = true;
 
                                     round++;
 
-
-//                                round = round%3;
-
                                     index=0;
                                     stage.removeChildren(3, stage.children.length);
 
-
                                     round = round%3;
-//													if(round == 3){
-//
-//														levelUp_sound.play();
-//
-//														canPick = false;
-//														newlevel = true;
-//														level = 2;
-//														round = 0;
-//														totlalError = 0;
-//														newRound= false;
-//														stage.removeChildren(3, stage.children.length);
-//
-//													}
-
 
                                 }
 
                             }
                             else {
 
-
-
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
-
-
-//							backGround_sound.play();
+                           var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
 
                                 selectedTile.setTexture(texture);
 
@@ -802,25 +641,17 @@
                                     backGround_sound.pause();
 
                                     loose_sound.play();
-//								richText.text = "Game Over!"
-//								stage.addChild(richText);
-//								renderer.render(stage);
+
                                     canPick = false;
 
                                     clearTimeout(gameTimer);
 
                                     isgamesatrt = false;
-
-
-
                                     isgameover= true;
-                                    circlecount = 0;
+
                                     document.getElementById('introResultdiv').style.display = "block";
 
                                     introResultstage.addChild(introResultdivrendergraphics);
-
-                                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
 
 
                                 }
@@ -1004,40 +835,24 @@
 
                                 totlalError ++;
 
-//							if(totlalError >= maxError){
-//
-//								richText.text = "Game Over!"
-//
-//								isgameover = true;
-//								circlecount =0;
-//								stage.addChild(richText);
-//								renderer.render(stage);
-//								canPick = false;
-//
-//							}
-
-
                                 if(totlalError< maxError) {
                                     wrClick_sound.play();
                                 }
 
                                 if(totlalError >= maxError) {
+
                                     countDown_sound2.pause();
                                     backGround_sound.pause();
 
                                     loose_sound.play();
-//								richText.text = "Game Over!"
-//								stage.addChild(richText);
-//								renderer.render(stage);
+
                                     canPick = false;
 
                                     clearTimeout(gameTimer);
 
                                     isgamesatrt = false;
+                                    isgameover= true;
 
-
-                                    isgameover = true;
-                                    circlecount = 0;
                                     document.getElementById('introResultdiv').style.display = "block";
 
                                     introResultstage.addChild(introResultdivrendergraphics);
@@ -1072,43 +887,48 @@
     }
 
 
-    //----------------------------------------------------------------------------------------------------------------------- level2 countdown
+    //----------------------------------------------------------------------------------------------------------------------- level1 countdown
 
 
-    function countdown5seconds()
+    function level1countdownseconds()
     {
         second--;
         if(second>5&&second<=7)
         {
             richText.setStyle(style);
-            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
+            timer = setTimeout('level1countdownseconds()',1000);//调用自身实现
             richText.text = "Level 1";
         }else if(second>3&&second<=5)
         {
             richText.setStyle(style2);
-            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
+            timer = setTimeout('level1countdownseconds()',1000);//调用自身实现
             richText.text = "According to the waste";
         }
         else if (second>0&&second<=3){
             countDown_sound.play();
             richText.setStyle(style);
             richText.text = second;
-            timer = setTimeout('countdown5seconds()',1000);
+            timer = setTimeout('level1countdownseconds()',1000);
         }else if (second == 0)
         {
             richText.setStyle(style);
             richText.text = "Go!"
 
 
-            timer = setTimeout('countdown5seconds()',1000);
+            timer = setTimeout('level1countdownseconds()',1000);
         }
         else if (second < 0)
         {
+            // start counting  level1 game tiem ( 60 seconds)
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
+
+            // remove count down text
             stage.removeChild(richText);
 
+            // place level 1 game zone
             placeTiles();
 
+            // clear timer
             clearTimeout(timer);
         }
     }
@@ -1148,6 +968,7 @@
 
         }else if(second2<0){
             gameTime = 60;
+            richText.text = 60;
             stage.removeChild(richText);
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
             newRound = true;
@@ -1157,9 +978,9 @@
         }
     }
 
-    //----------------------------------------------------------------------------------------------------------------------- set 30 seconds game time
 
 
+    //----------------------------------------------------------------------------------------------------------------------- this time countdown for the game that is not the last one
 
     function countdown60secondsgametime() {
 
@@ -1169,124 +990,92 @@
         {
             countingText.text = 'Time Left: '+gameTime;
 
-
-            if (gameTime == 0){
-
-                if(level ==2){
-                    richText.text = "Time Up!"
-                    backGround_sound.pause();
-                    isgameover = true;
-
-                    isgamesatrt = false;
-
-                    stage.addChild(richText);
-                    renderer.render(stage);
-                    canPick = false;
-
-                }
+            if (gameTime == 0)  // if a level game time up, go into next level
+            {
                 if(level ==1){
-                    richText.text = "Next Level"
-                    stage.addChild(richText);
-                    renderer.render(stage);
-                    canPick = false;
-                    level ++;
-
-
-                    isgamesatrt = false;
-                    newRound = false;
+                richText.text = "Next Level"     // show next level 1 second
+                }else if (level ==2){
+                    richText.text = "Time UP"
                 }
-
+                stage.addChild(richText);
+                canPick = false;                   // do not allow to pick color block anymore
             }
-
+            renderer.render(stage);
             gameTimer = setTimeout('countdown60secondsgametime()',1000);
         }
         if(gameTime == -1 )
         {
-            if (level==2) {
 
-                if(isgameover==true){
-                    circlecount = 0;
-                    backGround_sound.pause();
-                    startshowcount = 0;
-                    document.getElementById('introResultdiv').style.display = "block";
+            if(level==1){
+            stage.removeChildren(3, stage.children.length);
+            isgamesatrt = false;              // stop game
+            newRound = false;                 // reset newRound
+            newlevel=true;                     // reset new level
 
-                    introResultstage.addChild(introResultdivrendergraphics);
-
-                    renderer.render(stage);
-
-                }else {
-                    canPick = false;
-                    circlecount = 0;
-                    round = 0;
-                    totlalError = 0;
-                    newRound = false;
-
-                    startshowcount = 0;
-                    stage.removeChildren(3, stage.children.length);
+            canPick=false;
+            round = 0;
+            totlalError = 0;
+            selectedRightColor =0;
 
 
-//
-
-                    document.getElementById('introResultdiv').style.display = "block";
-
-                    intropageshow = true;
-
-                    introResultstage.addChild(introResultdivrendergraphics);
-
-                    intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level2intro.png");
-
-                    intropage.anchor.set(0.5);
-                    intropage.x = window.innerWidth / 2;
-                    intropage.y = window.innerHeight / 2;
-                    intropage.scale.set(1.3);
-
-                    intropage.buttonMode = true;
-                    intropage.interactive = true;
-                    introResultstage.addChild(intropage);
+            level++;                            // next level
+            document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
 
 
-                    clearTimeout(gameTimer);
-                }
+            intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level2intro.png");
+            intropage.alpha= 0;
+
+            introResultstage.addChild(introResultdivrendergraphics);  // add animation engine
+
+            intropageshow = true;
+
+            }else if (level ==2 ){
+
+                backGround_sound.pause();
+                animationcount = 0;
+//                stage.removeChildren(0, stage.children.length);
+                isgamesatrt = false;              // stop game
+                newRound = false;                 // reset newRound
+                newlevel=true;                     // reset new level
+
+                round = 0;
+                totlalError = 0;
+                selectedRightColor =0;
+
+
+                level=1;   //reset level
+                document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
+                introResultstage.addChild(introResultdivrendergraphics);
+                isgamesatrt = false;
+                isgameover = true;
+
             }
+            clearTimeout(gameTimer);
         }
 
     }
 
-
-
-    //----------------------------------------------------------------------------------------------------------------------- set rounder chekcer
-
-    //
-    //    var roundTimer;
-    //    function roundTimerChecker() {
-    //
-    //        gameTimer = setTimeout('roundTimerChecker()',1000);
-    //    }
-    //	//stage.addChild(bgPic);
-    //    roundTimer = roundTimerChecker('roundTimerChecker()',1000);
-
-
-
-
     startPage.mousedown = startPage.touchstart = function(data){
         if(level==1) {
-            countDown_sound.play();
+            // display level1 countdown music
+                countDown_sound.play();
         }else if(level ==2){
-            newlevel = true;
+
+            isgamesatrt = true;
             countDown_sound2.play();
             // palce second level sound
         }
         introResultdivrendergraphics.clear();
-        introResultstage.removeChild(introResultdivrendergraphics);
-        introResultstage.removeChild(startPage);
+        introResultstage.removeChildren(0,introResultstage.children.length);
         introResultdivrenderer.render(introResultstage)
+        // hide the introResultdiv DIV
         document.getElementById('introResultdiv').style.display="none";
-        intropageshow = false;
-        isskip  = false;
+        // start game
         isgamesatrt = true;
 
     }
 
+    var animationcount =0;
     var isstop = true;
     //	var time1 = new date();
     renderer.render(stage);
@@ -1294,14 +1083,155 @@
     animate();
     function animate() {
 
-        if(isgamesatrt){
+
+        if(!isgamesatrt){  // if game is not stat or gameover
+
+            if(intropageshow){  // if show intropageshow
+
+                    if( Math.sin(animationcount)* 2000<=900) {  // before intropage micro animation
+                        // satr micro animation
+                        intropage.alpha += 0.2;
+                        introResultdivrendergraphics.clear();
+                        introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+                        introResultdivrendergraphics.drawCircle(-20, 0, Math.abs(Math.sin(animationcount)) * 1500);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                        introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.abs(Math.sin(animationcount * 1.5)) * 2600);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount+=0.1;
+                    }else  // after the microanimation thow intropage
+                    {
+                       // end micro anmimation add game intro page
+
+
+
+
+                        intropage.anchor.set(0.5);
+                        intropage.x = window.innerWidth/2;
+                        intropage.y = window.innerHeight/2;
+                        intropage.scale.set(1.3);
+
+                        intropage.buttonMode = true;
+                        intropage.interactive = true;
+
+                        // add ingtropage click event
+
+                        intropage.mousedown = intropage.touchstart = function (data) {
+
+                            if(level ==1) // if  level1 paly backgrould music
+                            {
+                                backGround_sound.play();
+                            }
+                            // remove this intro pic
+                            introResultstage.removeChild(intropage);
+                            introResultdivrenderer.render(introResultstage);
+                            // show start page
+                            isstartshow = true;
+                        }
+
+                        introResultstage.addChild(intropage);
+
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount = 0;
+                        intropageshow= false;
+                    }
+               }
+
+            if(!intropageshow&&isstartshow)   // finish show intropage then show start screen
+              {
+                    if (Math.sin(animationcount*1.5) * 2000 < 1200) {  // before startpage show  micro animation first
+                        introResultdivrendergraphics.clear();
+                        introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+                        introResultdivrendergraphics.drawCircle(-100, 0, Math.sin(animationcount*2.5) * 1400);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                        introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.sin(animationcount * 1.6) * 1200);
+                        //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount += 0.2;
+                    } else {   // after the microanimation thow startpage
+
+                        //reset animation count
+                        animationcount = 0;
+
+                        startPage.anchor.set(0.5);
+                        startPage.x = window.innerWidth/2;
+                        startPage.y = window.innerHeight/2;
+                        startPage.scale.set(1.3);
+
+                        startPage.buttonMode = true;
+                        startPage.interactive = true;
+                        introResultstage.addChild(startPage);
+                        introResultdivrenderer.render(introResultstage);
+                        isstartshow= false;
+                    }
+            }
+
+            if (!intropageshow&&!isstartshow&&isgameover)  // shwo game over screen
+            {
+                // shwo micro animation
+
+
+                if( Math.sin(animationcount)<=0.4) {
+
+                    introResultdivrendergraphics.clear();
+                    introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
+                    introResultdivrendergraphics.drawCircle(window.innerWidth/2, -80, Math.abs(Math.sin(animationcount)) * 1800);
+                    introResultdivrendergraphics.endFill();
+                    introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                    introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight, Math.abs(Math.sin(animationcount * 1.5)) * 1800);
+                    //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
+                    introResultdivrendergraphics.endFill();
+
+                    introResultdivrenderer.render(introResultstage);
+                    animationcount += 0.2;
+                }else{
+
+                    isgameover = false;
+
+                    setTimeout(function () {
+
+                        var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
+                        gameoveText.anchor.set(0.5);
+
+                        gameoveText.y = window.innerHeight/2-270;
+                        gameoveText.x = window.innerWidth/2;
+
+                        introResultstage.addChild(gameoveText);
+                        introResultdivrenderer.render(introResultstage);
+                        //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
+
+                    }, 1000);
+
+                    setTimeout(function () {
+
+                        var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
+                        resluText.anchor.set(0.5);
+
+                        resluText.y = window.innerHeight/2+150;
+                        resluText.x = window.innerWidth/2;
+
+                        introResultstage.addChild(resluText);
+                        introResultdivrenderer.render(introResultstage);
+                        //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
+
+                    }, 2000);
+
+
+                }
+            }
+        }
+        else if(isgamesatrt){
 
             if (level == 1) {
                 if(newlevel){
 
                     newRound = false;
                     newlevel = false;
-                    timer = countdown5seconds('countdown5seconds()',1000);
+                    timer = level1countdownseconds('level1countdownseconds()',1000);
 
 
                 }else{
@@ -1334,145 +1264,6 @@
                     }
                 }
             }
-        }
-
-
-
-
-
-        if(intropageshow && !isgameover){
-            if( Math.sin(circlecount)* 2000>700){
-                intropageshow= false;
-
-                intropage.mousedown = intropage.touchstart = function (data) {
-
-
-                    if(level ==1) {
-                        backGround_sound.play();
-                    }
-
-
-
-                    introResultstage.removeChild(intropage);
-
-
-                    introResultdivrenderer.render(introResultstage);
-
-                    isskip = true;
-
-//										document.getElementById('introResultdiv').style.display="none";
-//										intropageshow = false;
-
-
-//										introResultdivrenderer.render(introResultstage);
-                }
-
-
-                introResultstage.addChild(intropage);
-                introResultdivrenderer.render(introResultstage);
-
-
-            }
-            intropage.alpha +=0.3 ;
-            introResultdivrendergraphics.clear();
-            introResultdivrendergraphics.beginFill(0x0598f2,0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-            introResultdivrendergraphics.drawCircle(-20,0,Math.abs(Math.sin(circlecount))* 1500);
-            introResultdivrendergraphics.endFill();
-            introResultdivrendergraphics.beginFill(0x00306f,0.95);
-            introResultdivrendergraphics.drawCircle(window.innerWidth+150,window.innerHeight - 200,Math.abs(Math.sin(circlecount*1.5))* 2600);
-            //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-            introResultdivrendergraphics.endFill();
-
-            introResultdivrenderer.render(introResultstage);
-
-        }
-
-        if (isskip&&!isstartshow) {
-
-
-            if (Math.sin(startshowcount*1.5) * 2000 < 1200) {
-                introResultdivrendergraphics.clear();
-                introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-                introResultdivrendergraphics.drawCircle(-100, 0, Math.sin(startshowcount*2.5) * 1400);
-                introResultdivrendergraphics.endFill();
-                introResultdivrendergraphics.beginFill(0x00306f, 0.95);
-                introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.sin(startshowcount * 1.6) * 1200);
-                //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-                introResultdivrendergraphics.endFill();
-
-                introResultdivrenderer.render(introResultstage);
-
-                startshowcount += 0.2;
-            } else {
-                startPage.anchor.set(0.5);
-                startPage.x = window.innerWidth/2;
-                startPage.y = window.innerHeight/2;
-                startPage.scale.set(1.3);
-
-                startPage.buttonMode = true;
-                startPage.interactive = true;
-                introResultstage.addChild(startPage);
-
-                introResultdivrenderer.render(introResultstage);
-            }
-        }
-
-
-
-        if(!intropageshow && isgameover&&isstop){
-
-            if( Math.sin(circlecount)<=0.4) {
-
-
-                introResultdivrendergraphics.clear();
-                introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-                introResultdivrendergraphics.drawCircle(window.innerWidth/2, -80, Math.abs(Math.sin(circlecount)) * 1800);
-                introResultdivrendergraphics.endFill();
-                introResultdivrendergraphics.beginFill(0x00306f, 0.95);
-                introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight, Math.abs(Math.sin(circlecount * 1.5)) * 1800);
-                //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-                introResultdivrendergraphics.endFill();
-
-                introResultdivrenderer.render(introResultstage);
-            }else{
-                isstop = false;
-
-
-
-                setTimeout(function () {
-
-                    var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
-                    gameoveText.anchor.set(0.5);
-
-                    gameoveText.y = window.innerHeight/2-270;
-                    gameoveText.x = window.innerWidth/2;
-
-                    introResultstage.addChild(gameoveText);
-                    introResultdivrenderer.render(introResultstage);
-                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
-                }, 1000);
-
-                setTimeout(function () {
-
-                    var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
-                    resluText.anchor.set(0.5);
-
-                    resluText.y = window.innerHeight/2+150;
-                    resluText.x = window.innerWidth/2;
-
-                    introResultstage.addChild(resluText);
-                    introResultdivrenderer.render(introResultstage);
-                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
-                }, 2000);
-
-
-            }
-
         }
 
         circlecount+=0.1;
