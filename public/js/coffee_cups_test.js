@@ -20,7 +20,7 @@ var loader = new PIXI.loaders.Loader();
 var offset = 35;
 
 // Basic settings
-var TotalCups = 2;
+var TotalCups = 6;
 var MinCups = 2;
 var MaxCups = 6;
 var objectWidth = 135;
@@ -38,23 +38,21 @@ for (var i = 0; i < CupsTexture.length; i++) {
     console.log(BinsTexture[i][1]);
 };
 
+var clickObjs = [];
+var valObjs = [];
 var res = GenerateRandomTexture(TotalCups);
-console.log(res);
-var CupsObjs = res.c_objs;
-var BinsObjs = res.b_objs;
-var CupsValues = res.c_values;
-var BinsValues = res.b_values;
-console.log(CupsObjs);
-console.log(BinsObjs);
-console.log(CupsValues);
-console.log(BinsValues);
+clickObjs = res.clkObj;
+valObjs = res.clkcValue;
+console.log(clickObjs);
+console.log(valObjs);
 
 // Record previous click and count click times
 var preClick;
+var crentClick;
 var clickCount = 0;
 
 // Timer and Score
-var TotalTime = 0;
+var TotalTime = 60;
 var TotalScore = 0;
 
 // Create the objects of timer and score and set up its style
@@ -99,7 +97,7 @@ var SecondOutsidewidth = objectWidth + offset*4
 var SecondOutsideheight = DynamicWidth + offset*2;
 
 var start_point = 150; // a start point of its inside round
-var intervals = 170; // the space (up to down) between two cups/bins
+var intervals = 170; // the space between two cups/bins
 
 var FirstInsideX = startX+offset*2+objectWidth*1;
 var FirstInsidewidth = objectWidth;
@@ -116,15 +114,13 @@ function Drawbackground() {
     graphics.drawRect(0, startY/2-objectWidth, window.innerWidth, window.innerHeight/7, 0);
     graphics.endFill();
 
-    stage.addChild(graphics);
+    //stage.addChild(graphics);
 }
 
 function GenerateRandomTexture(cups) {
 
-    var C_Obj = [];
-    var B_Obj = [];
-    var C_Val = [];
-    var B_Val = [];
+    var clickObjs = [];
+    var valueArray = [];
     var res  = {};
     var rate = 0.5;
 
@@ -141,16 +137,19 @@ function GenerateRandomTexture(cups) {
         var cups_temp = new PIXI.Sprite.fromImage(CupsTexture[random][1]);
         var bins_temp = new PIXI.Sprite.fromImage(BinsTexture[random][1]);
 
-        C_Obj.push(cups_temp);
-        C_Val.push(random);
-        B_Obj.push(bins_temp);
-        B_Val.push(random);
+        cups_temp.theName = "cup";
+        cups_temp.theValue = random;
+        bins_temp.theName = "bin";
+        bins_temp.theValue = random;
+
+        clickObjs.push(cups_temp);
+        clickObjs.push(bins_temp);
+        valueArray.push(random);
+        valueArray.push(random);
     }
 
-    res.c_objs = C_Obj;
-    res.c_values = C_Val;
-    res.b_objs = B_Obj;
-    res.b_values = B_Val;
+    res.clkObj = clickObjs;
+    res.clkcValue = valueArray;
 
     return res;
 }
@@ -199,25 +198,118 @@ function PutAllObjecs() {
 
     console.log("LOADER");
 
-    for (var i = 0; i < TotalCups; i++ ) {
+    for (var i = 0; i < TotalCups * 2; i++ ) {
 
-        var __intervals = intervals * i;
+        clickObjs[i].scale.x = 1;
+        clickObjs[i].scale.y = 1;
 
-        CupsObjs[i].x = FirstInsideX;
-        CupsObjs[i].y = start_point + __intervals + y_centre-DynamicY;
-        stage.addChild(CupsObjs[i]);
+        if(i % 2 == 0) {
+            __intervals = startY+offset*((i/2)+1)+objectWidth*((i/2));
+            clickObjs[i].position.x = FirstInsideX;
+            clickObjs[i].position.y =  __intervals + y_centre-DynamicY;
+        //    console.log("first　= "+__intervals);
+        } else {
+            __intervals = startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2));
+            clickObjs[i].position.x = SecondInsideX;
+            clickObjs[i].position.y = __intervals + y_centre-DynamicY;
+        //    console.log("secod　= "+__intervals);
+        }
 
-        BinsObjs[i].x = SecondInsideX;
-        BinsObjs[i].y = start_point + __intervals + y_centre-DynamicY;
-        stage.addChild(BinsObjs[i]);
+        stage.addChild(clickObjs[i]);
+
+        clickObjs[i].interactive = true;
+
+        clickObjs[i].on('mousedown', function(){
+            var match_obj = pairwise(this);
+            if(match_obj) {
+                preClick.visible = false;
+                crentClick.visible = false;
+                drawHighLighter(crentClick, preClick, false);
+            }
+        }).on('tap', function(){
+            var match_obj = pairwise(this);
+            if(match_obj) {
+                preClick.visible = false;
+                crentClick.visible = false;
+                drawHighLighter(crentClick, preClick, false);
+            }
+        });
+
+        renderer.render(stage);
 
     }
 
+    //start the timer
     setInterval(function(){
-        TotalTime++;
+        if(TotalTime <= 0) {
+            TotalTime = 0;
+        } else {
+            TotalTime--;
+        }
         TimeText.text = TotalTime;
     }, 1000);
 
+}
+
+function pairwise(current_click) {
+
+    clickCount++;
+
+    crentClick = current_click;
+
+    if(clickCount == 1) {
+        preClick = crentClick;
+        drawHighLighter(crentClick, preClick, true);
+    } else if (clickCount == 2) {
+
+        console.log(preClick.theName);
+        console.log(preClick.theValue);
+        console.log(crentClick.theName);
+        console.log(crentClick.theValue);
+
+        if((preClick.theName != crentClick.theName) && (preClick.theValue == crentClick.theValue) ) {
+            console.log("MATCH !!!!");
+            drawHighLighter(crentClick, preClick, true);
+            clickCount = 0;
+            return true;
+
+        } else {
+            console.log("CANT MATCH");
+            clickCount = 0;
+            return false;
+        }
+    }
+}
+
+// Draw the selected block
+function drawHighLighter(current_click, previous_click, drawit){
+    var coverGraphics = new PIXI.Graphics();
+
+    var cIndex = clickObjs.indexOf(current_click);
+    var pIndex = clickObjs.indexOf(previous_click);
+
+    if(drawit) {
+        if(cIndex == pIndex) {
+            coverGraphics.beginFill(0xf2b179);
+            coverGraphics.drawRoundedRect(clickObjs[cIndex].position.x, clickObjs[cIndex].position.y, objectWidth, objectWidth, 10);
+            coverGraphics.endFill();
+        } else {
+            coverGraphics.beginFill(0xf2b179);
+            coverGraphics.drawRoundedRect(clickObjs[cIndex].position.x, clickObjs[cIndex].position.y, objectWidth, objectWidth, 10);
+            coverGraphics.drawRoundedRect(clickObjs[pIndex].position.x, clickObjs[pIndex].position.y, objectWidth, objectWidth, 10);
+            coverGraphics.endFill();
+        }
+    } else {
+        coverGraphics.beginFill(0x00a0e4);
+        coverGraphics.drawRoundedRect(clickObjs[cIndex].position.x, clickObjs[cIndex].position.y, objectWidth, objectWidth, 10);
+        coverGraphics.drawRoundedRect(clickObjs[pIndex].position.x, clickObjs[pIndex].position.y, objectWidth, objectWidth, 10);
+        coverGraphics.endFill();
+    }
+
+    stage.addChild(coverGraphics);
+    stage.addChild(clickObjs[cIndex]);
+
+    renderer.render(stage);
 }
 
 function DrawSocreBoard() {
@@ -231,6 +323,8 @@ function DrawSocreBoard() {
     stage.addChild(scorelabelText);
     stage.addChild(scoreText);
 
+    renderer.render(stage);
+
 }
 
 function DrawTimeBoard() {
@@ -243,6 +337,8 @@ function DrawTimeBoard() {
 
     stage.addChild(TimelabelText);
     stage.addChild(TimeText);
+
+    renderer.render(stage);
 }
 
 function DrawName() {
@@ -259,13 +355,15 @@ function DrawName() {
     GameNameText.y = startY/3-objectWidth+window.innerHeight/14;
 
     stage.addChild(GameNameText);
+
+    renderer.render(stage);
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    //requestAnimationFrame(animate);
 
     // render the container
-    renderer.render(stage);
+    //renderer.render(stage);
 }
 
 
@@ -283,9 +381,6 @@ function DrawThemes() {
     DrawTimeBoard();
 
     DrawName();
-
-    // render the container
-    renderer.render(stage);
 }
 
 DrawThemes();
