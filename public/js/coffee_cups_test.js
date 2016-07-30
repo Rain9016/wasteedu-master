@@ -1,6 +1,9 @@
 // which will try to choose the best renderer for the environment you are in.
 var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight)
 
+// set background's color
+renderer.backgroundColor = 0x00a0e4;
+
 // The renderer will create a canvas element for you that you can then insert into the DOM.
 document.body.appendChild(renderer.view);
 
@@ -12,6 +15,15 @@ var graphics = new PIXI.Graphics();
 
 // create a generic resource loader
 var loader = new PIXI.loaders.Loader();
+
+// Offset of each block
+var offset = 35;
+
+// Basic settings
+var TotalCups = 2;
+var MinCups = 2;
+var MaxCups = 6;
+var objectWidth = 135;
 
 // load the resources of cups and bins
 var resourcePath = "public/imgs/";
@@ -26,27 +38,43 @@ for (var i = 0; i < CupsTexture.length; i++) {
     console.log(BinsTexture[i][1]);
 };
 
-var TotalCups = 6;
-var clickCupsObj = [];
 var res = GenerateRandomTexture(TotalCups);
 console.log(res);
-clickCupsObj = res.CupsObj;
-
-// Offset of each block
-var offset = 35;
-
-// Basic settings
-var MinCups = 2;
-var MaxCups = 6;
-var objectWidth = 135;
+var CupsObjs = res.c_objs;
+var BinsObjs = res.b_objs;
+var CupsValues = res.c_values;
+var BinsValues = res.b_values;
+console.log(CupsObjs);
+console.log(BinsObjs);
+console.log(CupsValues);
+console.log(BinsValues);
 
 // Record previous click and count click times
 var preClick;
 var clickCount = 0;
 
 // Timer and Score
-var totalTime = 0;
-var totalScore = 0;
+var TotalTime = 0;
+var TotalScore = 0;
+
+// Create the objects of timer and score and set up its style
+var Scorestyle = {
+    font : '30px Arial',
+    fill : 0xFFFFFF,
+    align : 'center'
+};
+
+var Timerstyle = {
+    font : '30px Arial',
+    fill : 0xFFFFFF,
+    align : 'center'
+};
+
+var scorelabelText = new PIXI.Text('Score:', Scorestyle);
+var scoreText = new PIXI.Text(TotalScore, Scorestyle);
+
+var TimelabelText = new PIXI.Text('Time:', Timerstyle);
+var TimeText = new PIXI.Text(TotalTime, Timerstyle);
 
 // Position of the inside window
 var totalWidth = MaxCups*objectWidth+(MaxCups+1)*offset;
@@ -56,10 +84,32 @@ var startY = (window.innerHeight-totalWidth)/2;
 // Initial position
 graphics.moveTo(startX, startY);
 
-function Drawbackground() {
+// Cups & Bins position
+var DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset; // a total width of cups depending on how many of them
+var DynamicY; // would be increased depending on the number of cups
+var y_centre = 300; // draw the round started at the centre of window
+var FirstOutsideX = startX + objectWidth;
+var FirstOutsideY = startY - offset + y_centre;
+var FirstOutsidewidth = objectWidth + offset*4;
+var FirstOutsideheight = DynamicWidth + offset*2;
 
-    // set background's color
-    renderer.backgroundColor = 0x00a0e4;
+var SecondOutsideX = startX + offset * 3 + objectWidth * 4;
+var SecondOutsideY = startY - offset + y_centre;
+var SecondOutsidewidth = objectWidth + offset*4
+var SecondOutsideheight = DynamicWidth + offset*2;
+
+var start_point = 150; // a start point of its inside round
+var intervals = 170; // the space (up to down) between two cups/bins
+
+var FirstInsideX = startX+offset*2+objectWidth*1;
+var FirstInsidewidth = objectWidth;
+var FirstInsideheight = objectWidth;
+
+var SecondInsideX = startX+offset*5+objectWidth*4;
+var SecondInsidewidth = objectWidth;
+var SecondInsideheight = objectWidth;
+
+function Drawbackground() {
 
     // Draw the area of scord board
     graphics.beginFill(0x00235d);
@@ -71,8 +121,10 @@ function Drawbackground() {
 
 function GenerateRandomTexture(cups) {
 
-    var Objs = [];
-    var Values = [];
+    var C_Obj = [];
+    var B_Obj = [];
+    var C_Val = [];
+    var B_Val = [];
     var res  = {};
     var rate = 0.5;
 
@@ -89,40 +141,23 @@ function GenerateRandomTexture(cups) {
         var cups_temp = new PIXI.Sprite.fromImage(CupsTexture[random][1]);
         var bins_temp = new PIXI.Sprite.fromImage(BinsTexture[random][1]);
 
-        Objs.push(cups_temp);
-        Values.push(random);
-        Objs.push(bins_temp);
-        Values.push(random);
+        C_Obj.push(cups_temp);
+        C_Val.push(random);
+        B_Obj.push(bins_temp);
+        B_Val.push(random);
     }
-    res.objs = Objs;
-    res.values = Values;
+
+    res.c_objs = C_Obj;
+    res.c_values = C_Val;
+    res.b_objs = B_Obj;
+    res.b_values = B_Val;
+
     return res;
 }
 
 function Drawcups(NumberOfCups) {
 
     var cups = NumberOfCups;
-    var DynamicWidth = cups*objectWidth+(cups+1)*offset; // a total width of cups depending on how many of them
-    var DynamicY; // would be increased depending on the number of cups
-    var y_centre = 300; // draw the round started at the centre of window
-
-    var FirstOutsideX = startX+objectWidth;
-    var FirstOutsideY = startY-offset+y_centre;
-    var FirstOutsidewidth = objectWidth+offset*4;
-    var FirstOutsideheight = DynamicWidth+offset*2;
-
-    var SecondOutsideX = startX+offset*3+objectWidth*4;
-    var SecondOutsideY = startY-offset+y_centre;
-    var SecondOutsidewidth = objectWidth+offset*4
-    var SecondOutsideheight = DynamicWidth+offset*2;
-
-    var FirstInsideX = startX+offset*2+objectWidth*1;
-    var FirstInsidewidth = objectWidth;
-    var FirstInsideheight = objectWidth;
-
-    var SecondInsideX = startX+offset*5+objectWidth*4;
-    var SecondInsidewidth = objectWidth;
-    var SecondInsideheight = objectWidth;
 
     if(cups < MinCups || cups > MaxCups) {
         throw new Error("invalidate the number of cups");
@@ -146,59 +181,46 @@ function Drawcups(NumberOfCups) {
 
     // Draw cups inside round rect
     graphics.beginFill(0x00a0e4);
-    for (var i = 0; i < cups * 2; i++){
-        if(i % 2 == 0){
-            graphics.drawRoundedRect(FirstInsideX, (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
+    for (var i = 0; i < cups; i++) {
 
-    /*        loader.load(function (loader,resources) {
-                res.objs[i].x = startX+offset*2+objectWidth*1;
-                res.objs[i].y = (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY;
-                stage.addChild(res.objs[i]);
-            });*/
+        var __intervals = intervals * i;
 
-        }else{
-            graphics.drawRoundedRect(SecondInsideX, (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+        graphics.drawRoundedRect(FirstInsideX, start_point + __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
 
-    /*        loader.load(function (loader,resources) {
-                res.objs[i].x = SecondInsideX;
-                res.objs[i].y = (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY
-                stage.addChild(res.objs[i]);
-            });*/
-        }
+        graphics.drawRoundedRect(SecondInsideX, start_point + __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+
     }
     graphics.endFill();
 
     stage.addChild(graphics);
+}
 
-    loader.load(function (loader, resources) {
-        console.log("LOADER");
-        //Set up Cups & Bins textures position
-        for (var i = 0; i < cups * 2; i++ ) {
-            if(i % 2 == 0 ) {
-                res.objs[i].x = startX+offset*2+objectWidth*1;
-                res.objs[i].y = (startY+offset*((i/2)+1)+objectWidth*((i/2)))+y_centre-DynamicY;
-                stage.addChild(res.objs[i]);
+function PutAllObjecs() {
 
-            } else {
-                res.objs[i].x = SecondInsideX;
-                res.objs[i].y = (startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2)))+y_centre-DynamicY
-                stage.addChild(res.objs[i]);
-            }
-        }
+    console.log("LOADER");
 
-    });
+    for (var i = 0; i < TotalCups; i++ ) {
+
+        var __intervals = intervals * i;
+
+        CupsObjs[i].x = FirstInsideX;
+        CupsObjs[i].y = start_point + __intervals + y_centre-DynamicY;
+        stage.addChild(CupsObjs[i]);
+
+        BinsObjs[i].x = SecondInsideX;
+        BinsObjs[i].y = start_point + __intervals + y_centre-DynamicY;
+        stage.addChild(BinsObjs[i]);
+
+    }
+
+    setInterval(function(){
+        TotalTime++;
+        TimeText.text = TotalTime;
+    }, 1000);
+
 }
 
 function DrawSocreBoard() {
-
-    var lablestyle = {
-        font : '30px Arial',
-        fill : 0xFFFFFF,
-        align : 'center'
-    };
-
-    var scorelabelText = new PIXI.Text('Score:', lablestyle);
-    var scoreText = new PIXI.Text(totalScore, lablestyle);
 
     scorelabelText.position.x = offset+3 * objectWidth;
     scorelabelText.position.y = startY/2 -objectWidth + window.innerHeight*2/21 +window.innerHeight/63;
@@ -212,15 +234,6 @@ function DrawSocreBoard() {
 }
 
 function DrawTimeBoard() {
-
-    var style = {
-        font : '30px Arial',
-        fill : 0xFFFFFF,
-        align : 'center'
-    };
-
-    var TimelabelText = new PIXI.Text('Time:', style);
-    var TimeText = new PIXI.Text(totalTime, style);
 
     TimelabelText.position.x = objectWidth/2;
     TimelabelText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
@@ -262,6 +275,8 @@ function DrawThemes() {
     Drawbackground();
 
     Drawcups(TotalCups);
+
+    loader.load(PutAllObjecs);
 
     DrawSocreBoard();
 
