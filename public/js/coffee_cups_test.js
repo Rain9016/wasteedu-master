@@ -240,18 +240,10 @@ function PutAllObjecs() {
         });
     }
 
-    //start the timer
-    setInterval(function(){
-        if(TotalTime <= 0) {
-            TotalTime = 0;
-        } else {
-            TotalTime--;
-        }
-        TimeText.text = TotalTime;
-    }, 1000);
-
     renderer.render(stage);
 }
+
+
 
 function pairwise(current_click) {
 
@@ -444,6 +436,17 @@ function DrawThemes() {
     DrawTimeBoard();
 
     DrawName();
+
+    //start the timer
+    setInterval(function(){
+        if(TotalTime <= 0) {
+            TotalTime = 0;
+            GameOver = true;
+        } else {
+            TotalTime--;
+        }
+        TimeText.text = TotalTime;
+    }, 1000);
 }
 
 DrawThemes();
