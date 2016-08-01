@@ -87,6 +87,9 @@ var intervals = 170; // the space between two cups/bins
 // create a object to store window size & position
 var WindowPosition = {};
 
+var GameOver = false;
+var GameEnd = false;
+
 // Set window size and position
 function InitWindowSizePosition(TotalCups) {
 
@@ -303,8 +306,12 @@ function pairwise(current_click) {
 // redraw a whole canva while going the next round
 function ReDrawContainer() {
 
-    // increases total number of cups at the next round
-    TotalCups += 1;
+    if(TotalCups >= MaxCups) {
+        GameEnd = true;
+    } else {
+        // increases total number of cups at the next round
+        TotalCups += 1;
+    }
 
     // Initial all objects
     clickObjs = new Array();
@@ -415,10 +422,20 @@ function DrawName() {
 
 function animate() {
 
-    requestAnimationFrame(animate);
+    if(GameOver == true) {
+        alert("TimeOut");
+        return false;
 
-    // render the container
-    renderer.render(stage);
+    } else if (GameEnd == true) {
+        alert("Total Score = "+ TotalScore);
+        return false;
+    }
+    else {
+        requestAnimationFrame(animate);
+
+        // render the container
+        renderer.render(stage);
+    }
 }
 
 function DrawThemes() {
