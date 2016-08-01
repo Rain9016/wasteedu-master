@@ -20,7 +20,7 @@ var loader = new PIXI.loaders.Loader();
 var offset = 35;
 
 // Basic settings
-var TotalCups = 6;
+var TotalCups = 2;
 var MinCups = 2;
 var MaxCups = 6;
 var objectWidth = 135;
@@ -180,13 +180,26 @@ function Drawcups(NumberOfCups) {
 
     // Draw cups inside round rect
     graphics.beginFill(0x00a0e4);
-    for (var i = 0; i < cups; i++) {
+    for (var i = 0; i < cups * 2; i++) {
 
         var __intervals = intervals * i;
 
-        graphics.drawRoundedRect(FirstInsideX, start_point + __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
+        //graphics.drawRoundedRect(FirstInsideX, start_point + __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
 
-        graphics.drawRoundedRect(SecondInsideX, start_point + __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+        //graphics.drawRoundedRect(SecondInsideX, start_point + __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+
+        if(i % 2 == 0) {
+            __intervals = startY+offset*((i/2)+1)+objectWidth*((i/2));
+            //clickObjs[i].position.x = FirstInsideX;
+            //clickObjs[i].position.y =  __intervals + y_centre-DynamicY;
+            graphics.drawRoundedRect(FirstInsideX, __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
+        } else {
+            __intervals = startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2));
+            //clickObjs[i].position.x = SecondInsideX;
+            //clickObjs[i].position.y = __intervals + y_centre-DynamicY;
+        //    console.log("secod　= "+__intervals);
+            graphics.drawRoundedRect(SecondInsideX, __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+        }
 
     }
     graphics.endFill();
@@ -220,24 +233,14 @@ function PutAllObjecs() {
         clickObjs[i].interactive = true;
 
         clickObjs[i].on('mousedown', function(){
-            var match_obj = pairwise(this);
-            if(match_obj) {
-                preClick.visible = false;
-                crentClick.visible = false;
-                drawHighLighter(crentClick, preClick, false);
-            }
+            pairwise(this);
         }).on('tap', function(){
-            var match_obj = pairwise(this);
-            if(match_obj) {
-                preClick.visible = false;
-                crentClick.visible = false;
-                drawHighLighter(crentClick, preClick, false);
-            }
+            pairwise(this);
         });
-
-        renderer.render(stage);
-
     }
+
+    //Score
+
 
     //start the timer
     setInterval(function(){
@@ -248,6 +251,8 @@ function PutAllObjecs() {
         }
         TimeText.text = TotalTime;
     }, 1000);
+
+    renderer.render(stage);
 
 }
 
@@ -267,16 +272,36 @@ function pairwise(current_click) {
         console.log(crentClick.theName);
         console.log(crentClick.theValue);
 
+    //    drawHighLighter(crentClick, preClick, true);
+
         if((preClick.theName != crentClick.theName) && (preClick.theValue == crentClick.theValue) ) {
             console.log("MATCH !!!!");
-            drawHighLighter(crentClick, preClick, true);
+            drawHighLighter(crentClick, preClick, false);
+
+            // reset count and get score !
             clickCount = 0;
-            return true;
+            TotalScore += 50;
+
+            // set the two objects invisible if match
+            preClick.visible = false;
+            crentClick.visible = false;
 
         } else {
             console.log("CANT MATCH");
+            drawHighLighter(crentClick, preClick, false);
+            
+            // reset count
             clickCount = 0;
-            return false;
+            preClick.visible = true;
+            crentClick.visible = true;
+
+            // Redraw the cup's object if not match
+            var cc = clickObjs.indexOf(crentClick);
+            var pp = clickObjs.indexOf(preClick);
+            stage.addChild(clickObjs[cc]);
+            stage.addChild(clickObjs[pp]);
+
+
         }
     }
 }
@@ -299,26 +324,35 @@ function drawHighLighter(current_click, previous_click, drawit){
             coverGraphics.drawRoundedRect(clickObjs[pIndex].position.x, clickObjs[pIndex].position.y, objectWidth, objectWidth, 10);
             coverGraphics.endFill();
         }
+        // the selected object in first time will be highlighed and keep its object.
+        stage.addChild(coverGraphics);
+        if(clickCount == 1) {
+            stage.addChild(clickObjs[cIndex]);
+        }
     } else {
+        // if false, the light color of two objects will be revert.
         coverGraphics.beginFill(0x00a0e4);
         coverGraphics.drawRoundedRect(clickObjs[cIndex].position.x, clickObjs[cIndex].position.y, objectWidth, objectWidth, 10);
         coverGraphics.drawRoundedRect(clickObjs[pIndex].position.x, clickObjs[pIndex].position.y, objectWidth, objectWidth, 10);
         coverGraphics.endFill();
+        stage.addChild(coverGraphics);
     }
-
-    stage.addChild(coverGraphics);
-    stage.addChild(clickObjs[cIndex]);
 
     renderer.render(stage);
 }
 
 function DrawSocreBoard() {
 
+    console.log("Score");
+
     scorelabelText.position.x = offset+3 * objectWidth;
     scorelabelText.position.y = startY/2 -objectWidth + window.innerHeight*2/21 +window.innerHeight/63;
 
     scoreText.position.x = offset+3*objectWidth + scorelabelText.width + offset;
     scoreText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
+
+    scoreText.text = TotalScore;
+    console.log(TotalScore);
 
     stage.addChild(scorelabelText);
     stage.addChild(scoreText);
@@ -360,10 +394,10 @@ function DrawName() {
 }
 
 function animate() {
-    //requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
     // render the container
-    //renderer.render(stage);
+    renderer.render(stage);
 }
 
 
