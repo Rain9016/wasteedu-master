@@ -20,7 +20,7 @@ var loader = new PIXI.loaders.Loader();
 var offset = 35;
 
 // Basic settings
-var TotalCups = 2;
+var TotalCups = 3;
 var MinCups = 2;
 var MaxCups = 6;
 var objectWidth = 135;
@@ -54,6 +54,9 @@ var clickCount = 0;
 // Timer and Score
 var TotalTime = 60;
 var TotalScore = 0;
+
+var isMatch = false;
+var match_count = 0;
 
 // Create the objects of timer and score and set up its style
 var Scorestyle = {
@@ -114,7 +117,7 @@ function Drawbackground() {
     graphics.drawRect(0, startY/2-objectWidth, window.innerWidth, window.innerHeight/7, 0);
     graphics.endFill();
 
-    //stage.addChild(graphics);
+    stage.addChild(graphics);
 }
 
 function GenerateRandomTexture(cups) {
@@ -141,6 +144,8 @@ function GenerateRandomTexture(cups) {
         cups_temp.theValue = random;
         bins_temp.theName = "bin";
         bins_temp.theValue = random;
+        cups_temp.matches = false;
+        bins_temp.matches = false;
 
         clickObjs.push(cups_temp);
         clickObjs.push(bins_temp);
@@ -154,7 +159,9 @@ function GenerateRandomTexture(cups) {
     return res;
 }
 
-function Drawcups(NumberOfCups) {
+function Drawcups(NumberOfCups, FirstOutsideheight, SecondOutsideheight) {
+
+    console.log("Drawcups");
 
     var cups = NumberOfCups;
 
@@ -171,6 +178,8 @@ function Drawcups(NumberOfCups) {
             DynamicY = 300;
         }
     }
+
+    console.log("dy = "+ DynamicY);
 
     // Draw cups outside round rect
     graphics.beginFill(0x015b9c);
@@ -205,6 +214,7 @@ function Drawcups(NumberOfCups) {
     graphics.endFill();
 
     stage.addChild(graphics);
+    renderer.render(stage);
 }
 
 function PutAllObjecs() {
@@ -239,9 +249,6 @@ function PutAllObjecs() {
         });
     }
 
-    //Score
-
-
     //start the timer
     setInterval(function(){
         if(TotalTime <= 0) {
@@ -272,26 +279,38 @@ function pairwise(current_click) {
         console.log(crentClick.theName);
         console.log(crentClick.theValue);
 
-    //    drawHighLighter(crentClick, preClick, true);
-
         if((preClick.theName != crentClick.theName) && (preClick.theValue == crentClick.theValue) ) {
             console.log("MATCH !!!!");
             drawHighLighter(crentClick, preClick, false);
 
-            // reset count and get score !
+            // reset count and get score
             clickCount = 0;
             TotalScore += 50;
+
+            // update new scores
+            scoreText.text = TotalScore;
+            stage.addChild(TimeText);
 
             // set the two objects invisible if match
             preClick.visible = false;
             crentClick.visible = false;
 
+            // set the two objects as true
+            match_count++;
+            console.log("match_count = "+match_count);
+            if(match_count == TotalCups) {
+                console.log("Run the next round !!");
+                match_count = 0;
+                ReDrawContainer();
+            }
         } else {
             console.log("CANT MATCH");
             drawHighLighter(crentClick, preClick, false);
-            
+
             // reset count
             clickCount = 0;
+
+            // set them visible due to not match
             preClick.visible = true;
             crentClick.visible = true;
 
@@ -300,10 +319,33 @@ function pairwise(current_click) {
             var pp = clickObjs.indexOf(preClick);
             stage.addChild(clickObjs[cc]);
             stage.addChild(clickObjs[pp]);
-
-
         }
     }
+}
+
+function ReDrawContainer() {
+    //var newgraphics = new PIXI.Graphics();
+
+    //var newstage = new PIXI.Container();
+
+    TotalCups += 1;
+    console.log("TotalCups = "+TotalCups);
+    clickObjs = new Array();
+    valObjs = new Array();
+    var res2 = GenerateRandomTexture(TotalCups);
+    clickObjs = res2.clkObj;
+    valObjs = res2.clkcValue;
+
+    DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset; // a total width of cups depending on how many of them
+
+    FirstOutsideheight = DynamicWidth + offset*2
+
+    SecondOutsideheight = DynamicWidth + offset*2;
+
+    DrawThemes();
+    Drawcups(TotalCups, FirstOutsideheight, SecondOutsideheight);
+    PutAllObjecs();
+    animate();
 }
 
 // Draw the selected block
@@ -341,9 +383,7 @@ function drawHighLighter(current_click, previous_click, drawit){
     renderer.render(stage);
 }
 
-function DrawSocreBoard() {
-
-    console.log("Score");
+function DrawScoreBoard() {
 
     scorelabelText.position.x = offset+3 * objectWidth;
     scorelabelText.position.y = startY/2 -objectWidth + window.innerHeight*2/21 +window.innerHeight/63;
@@ -352,7 +392,6 @@ function DrawSocreBoard() {
     scoreText.position.y = startY/2-objectWidth+window.innerHeight*2/21+window.innerHeight/63;
 
     scoreText.text = TotalScore;
-    console.log(TotalScore);
 
     stage.addChild(scorelabelText);
     stage.addChild(scoreText);
@@ -394,23 +433,22 @@ function DrawName() {
 }
 
 function animate() {
+
     requestAnimationFrame(animate);
 
     // render the container
     renderer.render(stage);
 }
 
-
-
 function DrawThemes() {
 
     Drawbackground();
 
-    Drawcups(TotalCups);
+    Drawcups(TotalCups, FirstOutsideheight, SecondOutsideheight);
 
     loader.load(PutAllObjecs);
 
-    DrawSocreBoard();
+    DrawScoreBoard();
 
     DrawTimeBoard();
 
