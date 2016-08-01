@@ -32,19 +32,12 @@ var BinsTexture = [['bin1', resourcePath+'g3.png'], ['bin2', resourcePath+'g4.pn
 for (var i = 0; i < CupsTexture.length; i++) {
     loader.add(CupsTexture[i][0], CupsTexture[i][1]);
     loader.add(BinsTexture[i][0], BinsTexture[i][1]);
-    console.log(CupsTexture[i][0]);
-    console.log(CupsTexture[i][1]);
-    console.log(BinsTexture[i][0]);
-    console.log(BinsTexture[i][1]);
 };
 
 var clickObjs = [];
 var valObjs = [];
 var res = GenerateRandomTexture(TotalCups);
 clickObjs = res.clkObj;
-valObjs = res.clkcValue;
-console.log(clickObjs);
-console.log(valObjs);
 
 // Record previous click and count click times
 var preClick;
@@ -71,8 +64,6 @@ var Timerstyle = {
     align : 'center'
 };
 
-var WindowPosition = {};
-
 var scorelabelText = new PIXI.Text('Score:', Scorestyle);
 var scoreText = new PIXI.Text(TotalScore, Scorestyle);
 
@@ -88,43 +79,28 @@ var startY = (window.innerHeight-totalWidth)/2;
 graphics.moveTo(startX, startY);
 
 // Cups & Bins position
-var DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset; // a total width of cups depending on how many of them
 var DynamicY; // would be increased depending on the number of cups
 var y_centre = 300; // draw the round started at the centre of window
-var FirstOutsideX = startX + objectWidth;
-var FirstOutsideY = startY - offset + y_centre;
-var FirstOutsidewidth = objectWidth + offset*4;
-var FirstOutsideheight = DynamicWidth + offset*2;
-
-var SecondOutsideX = startX + offset * 3 + objectWidth * 4;
-var SecondOutsideY = startY - offset + y_centre;
-var SecondOutsidewidth = objectWidth + offset*4
-var SecondOutsideheight = DynamicWidth + offset*2;
-
 var start_point = 150; // a start point of its inside round
 var intervals = 170; // the space between two cups/bins
 
-var FirstInsideX = startX+offset*2+objectWidth*1;
-var FirstInsidewidth = objectWidth;
-var FirstInsideheight = objectWidth;
+// create a object to store window size & position
+var WindowPosition = {};
 
-var SecondInsideX = startX+offset*5+objectWidth*4;
-var SecondInsidewidth = objectWidth;
-var SecondInsideheight = objectWidth;
-
+// Set window size and position
 function InitWindowSizePosition(TotalCups) {
 
-    WindowPosition.DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset;
+    WindowPosition.dynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset;
 
     WindowPosition.firstOutsideX = startX + objectWidth;
     WindowPosition.firstOutsideY = startY - offset + y_centre;
     WindowPosition.firstOutsidewidth = objectWidth + offset * 4;
-    WindowPosition.firstOutsideheight = WindowPosition.DynamicWidth + offset * 2;
+    WindowPosition.firstOutsideheight = WindowPosition.dynamicWidth + offset * 2;
 
     WindowPosition.secondOutsideX = startX + offset * 3 + objectWidth * 4;
     WindowPosition.secondOutsideY = startY - offset + y_centre;
     WindowPosition.secondOutsidewidth = objectWidth + offset * 4;
-    WindowPosition.secondOutsideheight = WindowPosition.DynamicWidth + offset*2;
+    WindowPosition.secondOutsideheight = WindowPosition.dynamicWidth + offset*2;
 
     WindowPosition.firstInsideX = startX + offset * 2 + objectWidth * 1;
     WindowPosition.firstInsidewidth = objectWidth;
@@ -175,8 +151,17 @@ function GenerateRandomTexture(cups) {
 
         clickObjs.push(cups_temp);
         clickObjs.push(bins_temp);
-        valueArray.push(random);
-        valueArray.push(random);
+    }
+
+    // Shuffle cup's objects
+    for(var i = 0; i < clickObjs.length; i++) {
+        if(i % 2 == 0) {
+            var tmp = clickObjs[i];
+            var rand = Math.floor(Math.random()* TotalCups);
+            rand = rand - ( rand  % 2);
+            clickObjs[i] = clickObjs[rand];
+            clickObjs[rand] = tmp;
+        }
     }
 
     res.clkObj = clickObjs;
@@ -185,55 +170,40 @@ function GenerateRandomTexture(cups) {
     return res;
 }
 
-function Drawcups(NumberOfCups, FirstOutsideheight, SecondOutsideheight) {
+function Drawcups() {
 
-    console.log("Drawcups");
-
-    var cups = NumberOfCups;
-
-    if(cups < MinCups || cups > MaxCups) {
+    if(TotalCups < MinCups || TotalCups > MaxCups) {
         throw new Error("invalidate the number of cups");
     } else {
-        if(cups == 2) {
+        if(TotalCups == 2) {
             DynamicY = 0;
-        } else if (cups == 3) {
+        } else if (TotalCups == 3) {
             DynamicY = 100;
-        } else if (cups == 4 ) {
+        } else if (TotalCups == 4 ) {
             DynamicY = 200;
         } else {
             DynamicY = 300;
         }
     }
 
-    console.log("dy = "+ DynamicY);
-
     // Draw cups outside round rect
     graphics.beginFill(0x015b9c);
-    graphics.drawRoundedRect(FirstOutsideX, FirstOutsideY-DynamicY, FirstOutsidewidth, FirstOutsideheight, 15);
-    graphics.drawRoundedRect(SecondOutsideX, SecondOutsideY-DynamicY, SecondOutsidewidth, SecondOutsideheight, 15);
+    graphics.drawRoundedRect(WindowPosition.firstOutsideX, WindowPosition.firstOutsideY-DynamicY, WindowPosition.firstOutsidewidth, WindowPosition.firstOutsideheight, 15);
+    graphics.drawRoundedRect(WindowPosition.secondOutsideX, WindowPosition.secondOutsideY-DynamicY, WindowPosition.secondOutsidewidth, WindowPosition.secondOutsideheight, 15);
     graphics.endFill();
 
     // Draw cups inside round rect
     graphics.beginFill(0x00a0e4);
-    for (var i = 0; i < cups * 2; i++) {
+    for (var i = 0; i < TotalCups * 2; i++) {
 
         var __intervals = intervals * i;
 
-        //graphics.drawRoundedRect(FirstInsideX, start_point + __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
-
-        //graphics.drawRoundedRect(SecondInsideX, start_point + __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
-
         if(i % 2 == 0) {
             __intervals = startY+offset*((i/2)+1)+objectWidth*((i/2));
-            //clickObjs[i].position.x = FirstInsideX;
-            //clickObjs[i].position.y =  __intervals + y_centre-DynamicY;
-            graphics.drawRoundedRect(FirstInsideX, __intervals + y_centre-DynamicY, FirstInsidewidth, FirstInsideheight, 10);
+            graphics.drawRoundedRect(WindowPosition.firstInsideX, __intervals + y_centre-DynamicY, WindowPosition.firstInsidewidth, WindowPosition.firstInsideheight, 10);
         } else {
             __intervals = startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2));
-            //clickObjs[i].position.x = SecondInsideX;
-            //clickObjs[i].position.y = __intervals + y_centre-DynamicY;
-        //    console.log("secod　= "+__intervals);
-            graphics.drawRoundedRect(SecondInsideX, __intervals + y_centre-DynamicY, SecondInsidewidth, SecondInsideheight, 10);
+            graphics.drawRoundedRect(WindowPosition.secondInsideX, __intervals + y_centre-DynamicY, WindowPosition.secondInsidewidth, WindowPosition.secondInsideheight, 10);
         }
 
     }
@@ -244,8 +214,6 @@ function Drawcups(NumberOfCups, FirstOutsideheight, SecondOutsideheight) {
 
 function PutAllObjecs() {
 
-    console.log("LOADER");
-
     for (var i = 0; i < TotalCups * 2; i++ ) {
 
         clickObjs[i].scale.x = 1;
@@ -253,14 +221,12 @@ function PutAllObjecs() {
 
         if(i % 2 == 0) {
             __intervals = startY+offset*((i/2)+1)+objectWidth*((i/2));
-            clickObjs[i].position.x = FirstInsideX;
+            clickObjs[i].position.x = WindowPosition.firstInsideX;
             clickObjs[i].position.y =  __intervals + y_centre-DynamicY;
-        //    console.log("first　= "+__intervals);
         } else {
             __intervals = startY+offset*(((i-1)/2)+1)+objectWidth*(((i-1)/2));
-            clickObjs[i].position.x = SecondInsideX;
+            clickObjs[i].position.x = WindowPosition.secondInsideX;
             clickObjs[i].position.y = __intervals + y_centre-DynamicY;
-        //    console.log("secod　= "+__intervals);
         }
 
         stage.addChild(clickObjs[i]);
@@ -285,7 +251,6 @@ function PutAllObjecs() {
     }, 1000);
 
     renderer.render(stage);
-
 }
 
 function pairwise(current_click) {
@@ -343,23 +308,27 @@ function pairwise(current_click) {
     }
 }
 
+// redraw a whole canva while going the next round
 function ReDrawContainer() {
 
+    // increases total number of cups at the next round
     TotalCups += 1;
-    console.log("TotalCups = "+TotalCups);
+
+    // Initial all objects
     clickObjs = new Array();
     valObjs = new Array();
     var res2 = GenerateRandomTexture(TotalCups);
     clickObjs = res2.clkObj;
     valObjs = res2.clkcValue;
 
-    DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset; // a total width of cups depending on how many of them
-    FirstOutsideheight = DynamicWidth + offset*2
-    SecondOutsideheight = DynamicWidth + offset*2;
+    // adjust the window size after total cups increased
+    WindowPosition.dynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset;
+    WindowPosition.firstOutsideheight = WindowPosition.dynamicWidth + offset*2
+    WindowPosition.secondOutsideheight = WindowPosition.dynamicWidth + offset*2;
 
-
+    InitWindowSizePosition(TotalCups);
     Drawbackground();
-    Drawcups(TotalCups, FirstOutsideheight, SecondOutsideheight);
+    Drawcups();
     PutAllObjecs();
     DrawScoreBoard();
     DrawTimeBoard();
@@ -462,9 +431,11 @@ function animate() {
 
 function DrawThemes() {
 
+    InitWindowSizePosition(TotalCups);
+
     Drawbackground();
 
-    Drawcups(TotalCups, FirstOutsideheight, SecondOutsideheight);
+    Drawcups();
 
     loader.load(PutAllObjecs);
 
