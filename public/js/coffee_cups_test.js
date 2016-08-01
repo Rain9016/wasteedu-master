@@ -20,7 +20,7 @@ var loader = new PIXI.loaders.Loader();
 var offset = 35;
 
 // Basic settings
-var TotalCups = 3;
+var TotalCups = 2;
 var MinCups = 2;
 var MaxCups = 6;
 var objectWidth = 135;
@@ -71,6 +71,8 @@ var Timerstyle = {
     align : 'center'
 };
 
+var WindowPosition = {};
+
 var scorelabelText = new PIXI.Text('Score:', Scorestyle);
 var scoreText = new PIXI.Text(TotalScore, Scorestyle);
 
@@ -109,6 +111,30 @@ var FirstInsideheight = objectWidth;
 var SecondInsideX = startX+offset*5+objectWidth*4;
 var SecondInsidewidth = objectWidth;
 var SecondInsideheight = objectWidth;
+
+function InitWindowSizePosition(TotalCups) {
+
+    WindowPosition.DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset;
+
+    WindowPosition.firstOutsideX = startX + objectWidth;
+    WindowPosition.firstOutsideY = startY - offset + y_centre;
+    WindowPosition.firstOutsidewidth = objectWidth + offset * 4;
+    WindowPosition.firstOutsideheight = WindowPosition.DynamicWidth + offset * 2;
+
+    WindowPosition.secondOutsideX = startX + offset * 3 + objectWidth * 4;
+    WindowPosition.secondOutsideY = startY - offset + y_centre;
+    WindowPosition.secondOutsidewidth = objectWidth + offset * 4;
+    WindowPosition.secondOutsideheight = WindowPosition.DynamicWidth + offset*2;
+
+    WindowPosition.firstInsideX = startX + offset * 2 + objectWidth * 1;
+    WindowPosition.firstInsidewidth = objectWidth;
+    WindowPosition.firstInsideheight = objectWidth;
+
+    WindowPosition.secondInsideX = startX + offset * 5 + objectWidth * 4;
+    WindowPosition.secondInsidewidth = objectWidth;
+    WindowPosition.secondInsideheight = objectWidth;
+
+}
 
 function Drawbackground() {
 
@@ -214,7 +240,6 @@ function Drawcups(NumberOfCups, FirstOutsideheight, SecondOutsideheight) {
     graphics.endFill();
 
     stage.addChild(graphics);
-    renderer.render(stage);
 }
 
 function PutAllObjecs() {
@@ -274,11 +299,6 @@ function pairwise(current_click) {
         drawHighLighter(crentClick, preClick, true);
     } else if (clickCount == 2) {
 
-        console.log(preClick.theName);
-        console.log(preClick.theValue);
-        console.log(crentClick.theName);
-        console.log(crentClick.theValue);
-
         if((preClick.theName != crentClick.theName) && (preClick.theValue == crentClick.theValue) ) {
             console.log("MATCH !!!!");
             drawHighLighter(crentClick, preClick, false);
@@ -324,9 +344,6 @@ function pairwise(current_click) {
 }
 
 function ReDrawContainer() {
-    //var newgraphics = new PIXI.Graphics();
-
-    //var newstage = new PIXI.Container();
 
     TotalCups += 1;
     console.log("TotalCups = "+TotalCups);
@@ -337,14 +354,17 @@ function ReDrawContainer() {
     valObjs = res2.clkcValue;
 
     DynamicWidth = TotalCups * objectWidth + (TotalCups + 1) * offset; // a total width of cups depending on how many of them
-
     FirstOutsideheight = DynamicWidth + offset*2
-
     SecondOutsideheight = DynamicWidth + offset*2;
 
-    DrawThemes();
+
+    Drawbackground();
     Drawcups(TotalCups, FirstOutsideheight, SecondOutsideheight);
     PutAllObjecs();
+    DrawScoreBoard();
+    DrawTimeBoard();
+    DrawName();
+
     animate();
 }
 
