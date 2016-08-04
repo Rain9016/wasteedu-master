@@ -154,18 +154,51 @@
         wordWrap : true,
         wordWrapWidth : 440
     };
+    var rubbishArray =[];
+    var rubbishVal = [0,1,0,1,0,1,0,1,0,1,0,0,0,0,1,1,1,1,2,2,2,2,2,2,2];
+    var rubbishName =
+            ["Coffee Cup","Coffee Cup","Can","Can","Glass Bottle","Glass Bottle",
+                "Plastic Bottles","Plastic Bottles","Food container","Food container",
+                "Magazine","Leaflet","Newspaper","Carton","Chip packet","Lolly wrapper",
+                "Soft plastic wrap","Plastic bag","Apple core","Banana peel","Sandwich","Hotdog","Tea bag","Paper towel","Tissue"];
 
 
+    for(var i = 1 ; i <= 25; i++) {
+
+        PIXI.loader.add("rubbish"+i, "public/imgs/game1/"+"rubbish"+i+".png");
+    }
  //------------------------------------------------- load resourcd ----------------------------------------------------------------
 
+    var indexpic = 0;
+    var wastePic = new PIXI.Sprite.fromImage("public/imgs/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+    var wasteLabel;  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
     var isloadfinish = false;
 
     // all resource will be loaded. the resource path will be kept in game1 json
     PIXI.loader.add("public/jsons/game1.json").load(finishLoad);
 
+    var round = 0;
+    //    var totalround = 3;
     function finishLoad(){    // if finish laod rsource  set isloadfinish true intro page show.
         //some function after the web has been loaded
+
+
+
+        for (var i = 1; i <= 25; i++) {
+            rubbishArray.push(new PIXI.Sprite.fromImage("public/imgs/game1/" + "rubbish" + i + ".png"));
+            rubbishArray[i - 1].anchor.set(0.5);
+            rubbishArray[i - 1].scale.x = 0.2;
+            rubbishArray[i - 1].scale.y = 0.2;
+            rubbishArray[i - 1].theVal = rubbishVal[i-1];
+            rubbishArray[i - 1].theName = rubbishName[i-1];
+        }
+        shuffleRubbishArry();
+
+
+
+         wastePic = rubbishArray[round]; // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+         wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
         isloadfinish = true;
     }
@@ -189,8 +222,7 @@
     var level = 1;
     var newRound = false;
 
-    var round = 0;
-//    var totalround = 3;
+
     var totalScore =0;
     var totlalError  =0;
     var maxError=3;
@@ -213,7 +245,8 @@
     var rottimes = -10; // for waste pic animation
     var isReverse = false;  // for waste pic animation
 
-
+//    var rubbishArray =[];
+    // origianl waste type value array   0 recycle 1 waste
 
     //------------------------------------------------- music set up ----------------------------------------------------------------
 
@@ -263,7 +296,7 @@
     coinLogoPic.position.x = window.innerWidth/2+700;
     coinLogoPic.position.y = window.innerHeight/2+190;
 
-    coinLogoPic.scale.set(0.9);
+    coinLogoPic.scale.set(1.2);
     coinLogoPic2.position.x = -200;
     coinLogoPic2.position.y = window.innerHeight/2+190;
 
@@ -272,33 +305,28 @@
     // let's create a moving shape
     var bggraph = new PIXI.Graphics();
     bgstage.addChild(bggraph);
+    bgstage.addChild(coinLogoPic);
     bgrenderer.render(bgstage);
 
 //---------------------------------------------------------------------------- waste pic
 
 // the total waste types&&icons
-    var wasteCollection  =[[0,'public/imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'public/imgs/game1/plastic_bag.png','Plastic Bag'],[2,'public/imgs/game1/appple_core.png','Apple Core']]
+//   var rubbishArray =[ [0,'public/imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'public/imgs/game1/plastic_bag.png','Plastic Bag'],[2,'public/imgs/game1/appple_core.png','Apple Core']]
 
 
 //---------------------------------------------------------------------------- random the waste the order
-    var wasteCollectionOrder  = new Array(wasteCollection.length);
 
-    for(var i =0;i<wasteCollection.length; i++)
-    {
-        wasteCollectionOrder[i] = i;
-    }
+   function shuffleRubbishArry(){
+
     // shuffle the waste order
     for(i=0;i<48;i++){
-        var from = Math.floor(Math.random()*3);
-        var to = Math.floor(Math.random()*3);
-        var tmp = wasteCollectionOrder[from];
-        wasteCollectionOrder[from]=wasteCollectionOrder[to];
-        wasteCollectionOrder[to]=tmp;
+        var from = Math.floor(Math.random()*25);
+        var to = Math.floor(Math.random()*25);
+        var tmp = rubbishArray[from];
+        rubbishArray[from]=rubbishArray[to];
+        rubbishArray[to]=tmp;
     }
-
-    var indexpic = 0;
-    var wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
-    var wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
+   }
 
 
     //---------------------------------- game element set up -------------------------------
@@ -388,7 +416,7 @@
 
     //------------------------------------------------------------------------------ score text
 
-    var totalScoreText = new PIXI.Text('Total Score: 0', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
+    var totalScoreText = new PIXI.Text('Score: 0', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
 
     totalScoreText.anchor.x = 0.5;
     totalScoreText.anchor.y = 0.5;
@@ -443,11 +471,10 @@
         var index =0;
         //------------------------------------------------------------------------------ waste board pic
 
-        indexpic  = wasteCollectionOrder[round];
-        wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
+        wastePic = rubbishArray[round];
         wastePic.anchor.x =0.5;
         wastePic.anchor.y =0.5;
-        wastePic.scale.set(1.1);
+//        wastePic.scale.set(0.3);
 
        //	wastePic.scale = 1;
 
@@ -456,13 +483,11 @@
 
         //------------------------------------------------------------------------------ waste label text
 
-        wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
+        wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '60px Constantia', fill : 0xFFFFFF, align : 'center center'});
         wasteLabel.anchor.x = 0.5;
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
-
-        var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
@@ -527,7 +552,7 @@
                             this.tint = 0xffffff;
                             this.alpha = 1;
 
-                            if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
+                            if (this.theVal == rubbishArray[round].theVal) {
 
                                 var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
@@ -535,7 +560,7 @@
 
 
                                 totalScore += 20;
-                                totalScoreText.text =  'Total Score: '+ totalScore;
+                                totalScoreText.text =  'Score: '+ totalScore;
 
                                 selectedRightColor++;
                                 if (selectedRightColor != totalRightColor) {
@@ -558,7 +583,7 @@
                                     index=0;
                                     stage.removeChildren(3, stage.children.length);
 
-                                    round = round%3;
+                                    round = round%24;
 
                                 }
 
@@ -634,8 +659,8 @@
         newRound = false;
         //------------------------------------------------------------------------------ waste board pic
 
-        indexpic  = wasteCollectionOrder[round];
-        wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
+
+        wastePic = rubbishArray[round];
         wastePic.anchor.x =0.5;
         wastePic.anchor.y =0.5;
 
@@ -646,13 +671,11 @@
 
         //------------------------------------------------------------------------------ waste label text
 
-        wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
+        wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '60px Constantia', fill : 0xFFFFFF, align : 'center center'});
         wasteLabel.anchor.x = 0.5;
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
-
-        var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
@@ -718,7 +741,7 @@
                             this.tint = 0xffffff;
                             this.alpha = 1;
 
-                            if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
+                            if (this.theVal == rubbishArray[round].theVal) {
 
 
                                 var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
@@ -727,7 +750,7 @@
 
 
                                 totalScore += 20;
-                                totalScoreText.text =  'Total Score: '+ totalScore;
+                                totalScoreText.text =  'Score: '+ totalScore;
 //							alert('pick red right!');
 
                                 selectedRightColor++;
@@ -753,7 +776,7 @@
 
                                     canPick = false;
 
-                                    round = round%3;
+                                    round = round%24;
                                     index=0;
 
 
@@ -1193,18 +1216,18 @@
         circlecount+=0.1;
         bggraph.clear();
 
-        bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
-//                            bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+200);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 430+ Math.cos(circlecount) *10);
-        bggraph.endFill();
-
-        bggraph.beginFill(0x0098db,0.4);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 360+ Math.cos(circlecount)* 6);
-        bggraph.endFill();
-
-        bggraph.beginFill(0x0098db,0.8);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 330+ Math.cos(circlecount)* 3);
-        bggraph.endFill();
+//        bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
+////                            bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+200);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 430+ Math.cos(circlecount) *10);
+//        bggraph.endFill();
+//
+//        bggraph.beginFill(0x0098db,0.4);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 360+ Math.cos(circlecount)* 6);
+//        bggraph.endFill();
+//
+//        bggraph.beginFill(0x0098db,0.8);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 330+ Math.cos(circlecount)* 3);
+//        bggraph.endFill();
 
         // just for fun, let's rotate mr rabbit a little
         coinLogoPic.rotation += 0.002;

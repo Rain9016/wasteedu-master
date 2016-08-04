@@ -203,7 +203,7 @@
     // for micro animation loop control
     var animationcount =0;
     // set fist leve game time. 60 seconds
-    var gameTime = 6;
+    var gameTime = 60;
     var isgameover = false;
     var newlevel  = true;
     var level = 1;
@@ -983,7 +983,7 @@
             timer2 = setTimeout('countdown3seconds()',1000);//��������ʵ��
 
         }else if(second2<0){
-            gameTime = 6;
+            gameTime = 60;
             richText.text = 60;
             stage.removeChild(richText);
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
