@@ -200,6 +200,14 @@
          wastePic = rubbishArray[round]; // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
          wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
+            try_again_btn.scale.set(1.2);
+            back_btn.scale.set(1.2);
+            try_again_btn.position.x = window.innerWidth/2 ;
+            try_again_btn.position.y =window.innerHeight*0.8;
+
+            back_btn.position.x = window.innerWidth/2 ;
+            back_btn.position.y =try_again_btn.position.y+try_again_btn.height+50;
+
         isloadfinish = true;
     }
 
@@ -455,6 +463,54 @@
     intropage.scale.set(1.3);
     intropage.buttonMode = true;
     intropage.interactive = true;
+
+
+
+    var try_again_btn_up_texture = PIXI.Texture.fromImage('public/imgs/try_again_up.png');
+    var try_again_btn_down_texture = PIXI.Texture.fromImage('public/imgs/try_again_down.png');
+    var back_btn_up_texture = PIXI.Texture.fromImage('public/imgs/back_up.png');
+    var back_btn_down_texture = PIXI.Texture.fromImage('public/imgs/back_down.png');
+
+
+    PIXI.loader.add("try_again_btn","public/imgs/try_again_up.png");
+
+    PIXI.loader.add("back_btn","public/imgs/back_up.png");
+
+    var try_again_btn = new PIXI.Sprite(try_again_btn_up_texture);
+    //    var try_again_down  = PIXI.Sprite.fromImage("public/imgs/try_again_down.png");
+
+    try_again_btn.buttonMode = true;
+    try_again_btn.interactive = true;
+    try_again_btn.anchor.set(0.5);
+
+
+    try_again_btn.mousedown = try_again_btn.touchstart = function(data){
+        rtClick_sound.play();
+        try_again_btn.texture = try_again_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+//        try_again_btn.tint = 0x000000;
+//        try_again_btn.alpah = 0.5;
+        location.href='/match_color';
+
+    }
+
+    var back_btn =  new PIXI.Sprite(back_btn_up_texture);
+
+    back_btn.buttonMode = true;
+    back_btn.interactive = true;
+
+    back_btn.anchor.set(0.5);
+
+
+
+
+    back_btn.mousedown = back_btn.touchstart = function(data){
+        rtClick_sound.play();
+        back_btn.texture = back_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+        location.href='/game';
+
+    }
 
     // ------------ initial start page intropage, currentlly it is only an interactive pic
     var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
@@ -1140,6 +1196,8 @@
                     introResultdivrenderer.render(introResultstage);
                     animationcount += 0.2;
                 }else{
+                    introResultstage.addChild(try_again_btn);
+                    introResultstage.addChild(back_btn);
 
                     isgameover = false;
 
