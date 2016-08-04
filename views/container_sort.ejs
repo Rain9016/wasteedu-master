@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta name="viewport" content="user-scalable=no"/>
+    <meta name="viewport" />
 
     <title>pixi.js example 1</title>
 
@@ -88,8 +88,22 @@
 //            });
 //        });
     </script>
+
+    <script>
+        window.onload=function(){
+
+//            alert(document.documentElement.clientHeight);
+            if(document.documentElement.scrollHeight <= document.documentElement.clientHeight) {
+                bodyTag = document.getElementsByTagName('body')[0];
+                bodyTag.style.height = document.documentElement.clientWidth / screen.width * screen.height + 'px';
+            }
+            setTimeout(function() {
+                window.scrollTo(0, 1)
+            }, 0);
+        };
+    </script>
 </head>
-<body style="background-color:  #074091">
+<body style="background-color:  #005a9c;">
 <div style="background-color: #3498db">
     <div id="container" ><div id="output"></div></div>
 </div>
@@ -189,7 +203,7 @@
     // for micro animation loop control
     var animationcount =0;
     // set fist leve game time. 60 seconds
-    var gameTime = 60;
+    var gameTime = 6;
     var isgameover = false;
     var newlevel  = true;
     var level = 1;
@@ -263,6 +277,55 @@
     var coinLogoPic = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
     var coinLogoPic2 = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
     var s_bg = PIXI.Sprite.fromImage("public/imgs/s_bg.png");
+
+
+
+    var try_again_btn_up_texture = PIXI.Texture.fromImage('public/imgs/try_again_up.png');
+    var try_again_btn_down_texture = PIXI.Texture.fromImage('public/imgs/try_again_down.png');
+    var back_btn_up_texture = PIXI.Texture.fromImage('public/imgs/back_up.png');
+    var back_btn_down_texture = PIXI.Texture.fromImage('public/imgs/back_down.png');
+
+
+    PIXI.loader.add("try_again_btn","public/imgs/try_again_up.png");
+
+    PIXI.loader.add("back_btn","public/imgs/back_up.png");
+
+    var try_again_btn = new PIXI.Sprite(try_again_btn_up_texture);
+    //    var try_again_down  = PIXI.Sprite.fromImage("public/imgs/try_again_down.png");
+
+    try_again_btn.buttonMode = true;
+    try_again_btn.interactive = true;
+    try_again_btn.anchor.set(0.5);
+
+
+    try_again_btn.mousedown = try_again_btn.touchstart = function(data){
+        rtClick_sound.play();
+        try_again_btn.texture = try_again_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+//        try_again_btn.tint = 0x000000;
+//        try_again_btn.alpah = 0.5;
+        location.href='/container_sort';
+
+    }
+
+    var back_btn =  new PIXI.Sprite(back_btn_up_texture);
+
+    back_btn.buttonMode = true;
+    back_btn.interactive = true;
+
+    back_btn.anchor.set(0.5);
+
+
+
+
+    back_btn.mousedown = back_btn.touchstart = function(data){
+        rtClick_sound.play();
+        back_btn.texture = back_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+        location.href='/game';
+
+    }
+//    var back_down = PIXI.Sprite.fromImage("public/imgs/back_down.png");
 
 
 
@@ -592,6 +655,13 @@
 
         shuffleRubbishIconArray();
 
+        try_again_btn.scale.set(1.2);
+        back_btn.scale.set(1.2);
+        try_again_btn.position.x = window.innerWidth/2 ;
+        try_again_btn.position.y =window.innerHeight*0.8;
+
+        back_btn.position.x = window.innerWidth/2 ;
+        back_btn.position.y =try_again_btn.position.y+try_again_btn.height+50;
 
 
     });
@@ -913,7 +983,7 @@
             timer2 = setTimeout('countdown3seconds()',1000);//��������ʵ��
 
         }else if(second2<0){
-            gameTime = 60;
+            gameTime = 6;
             richText.text = 60;
             stage.removeChild(richText);
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
@@ -993,6 +1063,8 @@
                 introResultstage.addChild(introResultdivrendergraphics);
                 isgamesatrt = false;
                 isgameover = true;
+
+
 
             }
             clearTimeout(gameTimer);
@@ -1131,6 +1203,10 @@
                 }else{
 
                     isgameover = false;
+
+
+                    introResultstage.addChild(try_again_btn);
+                    introResultstage.addChild(back_btn);
 
                     setTimeout(function () {
 
