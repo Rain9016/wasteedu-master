@@ -78,9 +78,9 @@
 
     </style>
 
-    <script src="public/js/pixi.js"></script>
-    <script src="public/js/vector.js"></script>
-    <script src="public/js/jquery.js"></script>
+    <script src="js/pixi.js"></script>
+    <script src="js/vector.js"></script>
+    <script src="js/jquery.js"></script>
 
     <script>
         $(function(){
@@ -112,9 +112,9 @@
     <div id = 'introResultdiv'style="position: absolute;background-color: #e5004f; opacity: 0.95; margin:0px; padding: 0px; border: 0px "></div>
 </div>
 
-<audio id="bgmusic" src="public/sounds/bgmusic.mp3" loop="loop"></audio>
+<audio id="bgmusic" src="sounds/bgmusic.mp3" loop="loop"></audio>
 <script>
-    PIXI.loader.add("public/jsons/wasteicon.json").load(finishLoad);
+    PIXI.loader.add("jsons/wasteicon.json").load(finishLoad);
 
 
     //------------------------------------------------------------------------------------------------------------------------------ sound play
@@ -126,7 +126,7 @@
 
 
 
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
+    var backGround_sound = new Audio("sounds/bgmusic.mp3");
 
 
     document.getElementById('bgmusic').play();
@@ -137,19 +137,19 @@
     //	});
 
 
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
+    var backGround_sound = new Audio("sounds/bgmusic.mp3");
     backGround_sound.loop = true;
     backGround_sound.volume = 0.1;
-    var levelUp_sound=  new Audio("public/sounds/levelUp.mp3");
-    var newRound_sound =  new Audio("public/sounds/newRound.mp3");
-    var rtClick_sound = new Audio("public/sounds/rtClick.mp3");
-    //    var wrClick_sound = new Audio("public/sounds/wrClick.mp3");
-    var wrClick_sound = new Audio("public/sounds/wrClick.mp3");
-    var gameOver_sound = new Audio("public/sounds/gameover.mp3");
-    var loose_sound = new Audio("public/sounds/lose.mp3");
+    var levelUp_sound=  new Audio("sounds/levelUp.mp3");
+    var newRound_sound =  new Audio("sounds/newRound.mp3");
+    var rtClick_sound = new Audio("sounds/rtClick.mp3");
+    //    var wrClick_sound = new Audio("sounds/wrClick.mp3");
+    var wrClick_sound = new Audio("sounds/wrClick.mp3");
+    var gameOver_sound = new Audio("sounds/gameover.mp3");
+    var loose_sound = new Audio("sounds/lose.mp3");
 
-    var countDown_sound = new Audio("public/sounds/cound_down1.mp3");
-    var countDown_sound2 = new Audio("public/sounds/cound_down3.mp3");
+    var countDown_sound = new Audio("sounds/cound_down1.mp3");
+    var countDown_sound2 = new Audio("sounds/cound_down3.mp3");
 
 
     var introResultstage = new PIXI.Container();
@@ -172,9 +172,9 @@
 
     document.getElementById('bgdiv').appendChild(bgrenderer.view);
 
-    var coinLogoPic = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
+    var coinLogoPic = PIXI.Sprite.fromImage("imgs/game1/logo-nobg.png");
 
-    var coinLogoPic2 = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
+    var coinLogoPic2 = PIXI.Sprite.fromImage("imgs/game1/logo-nobg.png");
 
     coinLogoPic2.anchor.set(0.5);
     coinLogoPic.anchor.set(0.5);
@@ -242,7 +242,7 @@
     //---------------------------------------------------------------------------- waste pic
 
 
-    var wasteCollection  =[[0,'public/imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'public/imgs/game1/plastic_bag.png','Plastic Bag'],[2,'public/imgs/game1/appple_core.png','Apple Core']]
+    var wasteCollection  =[[0,'imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'imgs/game1/plastic_bag.png','Plastic Bag'],[2,'imgs/game1/appple_core.png','Apple Core']]
 
 
 
@@ -307,7 +307,7 @@
 
     //---------------------------------------------------------------------------- waste pic
 
-    var bgPic = PIXI.Sprite.fromImage('public/imgs/game1/logo-nobg.png');
+    var bgPic = PIXI.Sprite.fromImage('imgs/game1/logo-nobg.png');
     bgPic.anchor.set(0.5);
 
     bgPic.position.x =  window.innerWidth+210;
@@ -546,7 +546,7 @@
 
     var startshowcount =0;
 
-    var intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level1intro.png");
+    var intropage = PIXI.Sprite.fromImage("imgs/game1/game1level1intro.png");
 
     intropage.alpha= 0;
     intropage.anchor.set(0.5);
@@ -565,7 +565,7 @@
     var isstartshow = false;
     var isgamesatrt = false;
     var isbackGroundsoundplay = true;
-    var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
+    var startPage = PIXI.Sprite.fromImage("imgs/game1/start.png");
 
     var gameTime = 60;
     countingText.text = 'Time Left: ' + Math.floor(gameTime);
@@ -668,7 +668,7 @@
             for (var i = 0; i < 3; i++) {
 
 
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('imgs/game1/'+chosenTiles[index]+'.png');
 
                 maskArray.push(tile);
 
@@ -715,7 +715,7 @@
 
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
                                 this.setTexture(texture);
 
@@ -783,7 +783,7 @@
 
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
 //							backGround_sound.play();
@@ -907,7 +907,7 @@
         for (var j = 0; j <= 3; j++) {
             for (var i = 0; i < 3; i++) {
 
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('imgs/game1/'+chosenTiles[index]+'.png');
 
                 maskArray.push(tile);
 
@@ -952,7 +952,7 @@
                             if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
                                 this.setTexture(texture);
 
@@ -996,7 +996,7 @@
                                 wrClick_sound.play();
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
 
@@ -1233,7 +1233,7 @@
 
                     introResultstage.addChild(introResultdivrendergraphics);
 
-                    intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level2intro.png");
+                    intropage = PIXI.Sprite.fromImage("imgs/game1/game1level2intro.png");
 
                     intropage.anchor.set(0.5);
                     intropage.x = window.innerWidth / 2;
