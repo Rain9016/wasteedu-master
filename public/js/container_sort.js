@@ -30,7 +30,7 @@ var timeTextLabel = new PIXI.Text(totalTime,{font : '30px Arial', fill : 0xFFFFF
 var gameNameLabel = new PIXI.Text('Container Sort', {font : '85px Arial', fill : 0xFFFFFF, align : 'center'});
 
 
-var resourcePath = "public/imgs/";
+var resourcePath = "imgs/";
 
 var textureArray = [['material1', resourcePath+'r1.png'], ['material2', resourcePath+'r2.png'], ['material3', resourcePath+'r3.png']];
 

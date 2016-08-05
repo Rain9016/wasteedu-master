@@ -44,7 +44,7 @@ for (var i = 0; i < objectNumber; i++) {
 };
 graphics.endFill();
 
-var resourcePath = "public/imgs/";
+var resourcePath = "imgs/";
 // Prelaod the asset
 var textureArray = [['material1', resourcePath+'g1.png'], ['material2', resourcePath+'g2.png'], ['material3', resourcePath+'g3.png'], ['material4', resourcePath+'g4.png']];
 
