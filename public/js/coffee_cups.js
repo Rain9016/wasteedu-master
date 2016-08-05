@@ -26,7 +26,7 @@ var MaxCups = 6;
 var objectWidth = 135;
 
 // load the resources of cups and bins
-var resourcePath = "public/imgs/";
+var resourcePath = "imgs/";
 var CupsTexture = [['cup1', resourcePath+'g1.png'], ['cup2', resourcePath+'g2.png']];
 var BinsTexture = [['bin1', resourcePath+'g3.png'], ['bin2', resourcePath+'g4.png']];
 for (var i = 0; i < CupsTexture.length; i++) {
