@@ -20,7 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 
 // Set up the static files
-app.use(express.static(__dirname + "/../wasteedu-master"));
+//app.use(express.static(__dirname + "/../wasteedu-master"));
+app.use(express.static('public'));
 
 app.get('/', function(req, res){
   res.render('index');
