@@ -177,6 +177,26 @@
 
     // all resource will be loaded. the resource path will be kept in game1 json
     PIXI.loader.add("public/jsons/game1.json").load(finishLoad);
+    PIXI.loader.add("public/sounds/bgmusic.mp3");
+    PIXI.loader.add("public/sounds/levelUp.mp3");
+    PIXI.loader.add("public/sounds/rtClick.mp3");
+    PIXI.loader.add("public/sounds/gameover.mp3");
+    PIXI.loader.add("public/sounds/lose.mp3");
+    PIXI.loader.add("public/sounds/cound_down1.mp3");
+    PIXI.loader.add("public/sounds/cound_down3.mp3");
+    PIXI.loader.add("public/imgs/game1/start.png");
+    PIXI.loader.add("public/imgs/game1/game1level2intro.png");
+    PIXI.loader.add("public/imgs/game1/logo-nobg.png");
+    PIXI.loader.add("public/imgs/game1/game1level1intro.png");
+
+    for(var i =0; i<=8;i++ ){
+        PIXI.loader.add("public/imgs/game1/"+i+".png");
+    }
+
+
+
+
+
 
     var round = 0;
     //    var totalround = 3;
@@ -272,6 +292,7 @@
     //last game countdown sound
     var countDown_sound2 = new Audio("public/sounds/cound_down3.mp3");
 
+    backGround_sound.loop = true;
 
     //----------------------------------------------  introResultdiv  basic set up -----------------------------------------------------
     // for introResultdiv container
