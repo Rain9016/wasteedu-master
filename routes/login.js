@@ -12,8 +12,8 @@ var cryptoKey = '8ff32489f92f33416694be8fdc2d4c22'; // encrypt/decrypt key
 
 // Set the cookie and session
 app.use(cookieParser());
-app.use(session({ 
-	secret: '8ff32489f92f33416694be8fdc2d4c22', 
+app.use(session({
+	secret: '8ff32489f92f33416694be8fdc2d4c22',
 	cookie: { maxAge: 60000 }
 }));
 
@@ -45,16 +45,7 @@ function decrypt(text){
 }
 
 
-// GET service
-router.get("/log",function(req,res){
-	res.render('login.ejs');
-	console.log('enter login page...');
-});
 
-router.get("/register", function(req,res){
-	res.render('register.ejs');
-	console.log('enter register page...')
-});
 
 // POST service
 router.post('/login', function(req, res){
@@ -98,7 +89,7 @@ router.post('/login', function(req, res){
 					console.log("Set the cookie!");
 				}
 			});
-	// Original account handler	
+	// Original account handler
 }else{
 
 	connection.query('SELECT COUNT(*) AS totalCount FROM user WHERE username = ? and password = ?', [encrypt(req.body.username), encrypt(req.body.password)] ,function(err,rows){
@@ -124,9 +115,9 @@ router.post('/login', function(req, res){
 	});
 }
 
-connection.on('error', function(err) {      
+connection.on('error', function(err) {
 	res.json({"code" : 100, "status" : "Error in connection database"});
-	return;     
+	return;
 });
 
 });
@@ -136,7 +127,7 @@ connection.on('error', function(err) {
 
 // Register service
 router.post('/register', function(req, res){
-	
+
 	console.log("register:"+req.body.username);
 
 	pool.getConnection(function(err,connection){
@@ -155,9 +146,9 @@ router.post('/register', function(req, res){
 			console.log('Last insert ID:', res.insertId);
 		});
 
-		connection.on('error', function(err) {      
+		connection.on('error', function(err) {
 			res.json({"code" : 100, "status" : "Error in connection database"});
-			return;     
+			return;
 		});
 
 	});
