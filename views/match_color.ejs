@@ -165,20 +165,18 @@
 
     for(var i = 1 ; i <= 25; i++) {
 
-        PIXI.loader.add("rubbish"+i, "imgs/"+"rubbish"+i+".png");
+        PIXI.loader.add("rubbish"+i, "imgs/game1/"+"rubbish"+i+".png");
     }
  //------------------------------------------------- load resourcd ----------------------------------------------------------------
 
     var indexpic = 0;
-    var wastePic = new PIXI.Sprite.fromImage("imgs/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+    var wastePic = new PIXI.Sprite.fromImage("imgs/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
     var wasteLabel;  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
     var isloadfinish = false;
 
     // all resource will be loaded. the resource path will be kept in game1 json
     PIXI.loader.add("jsons/game1.json").load(finishLoad);
-
-    PIXI.loader.add("sounds/levelUp.mp3");
     PIXI.loader.add("sounds/bgmusic.mp3");
     PIXI.loader.add("sounds/levelUp.mp3");
     PIXI.loader.add("sounds/rtClick.mp3");
@@ -208,7 +206,7 @@
 
 
         for (var i = 1; i <= 25; i++) {
-            rubbishArray.push(new PIXI.Sprite.fromImage("imgs/" + "rubbish" + i + ".png"));
+            rubbishArray.push(new PIXI.Sprite.fromImage("imgs/game1/" + "rubbish" + i + ".png"));
             rubbishArray[i - 1].anchor.set(0.5);
             rubbishArray[i - 1].scale.x = 0.2;
             rubbishArray[i - 1].scale.y = 0.2;
