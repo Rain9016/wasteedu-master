@@ -30,7 +30,7 @@ graphics.drawRect(0, startY/2-objectWidth, window.innerWidth, window.innerHeight
 graphics.endFill();
 
 var totalTime = 0;
-var resourcePath = "public/imgs/";
+var resourcePath = "imgs/";
 
 var textureArray = [['material1', resourcePath+'c1.png'], ['material2', resourcePath+'c2.png'], ['material3', resourcePath+'c3.png'], ['material4', resourcePath+'c4.png']];
 
