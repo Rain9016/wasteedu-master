@@ -25,7 +25,7 @@ var startY = (window.innerHeight-totalWidth)/2;
 // Initial position
 graphics.moveTo(startX, startY);
 
-var resourcePath = "public/imgs/";
+var resourcePath = "imgs/";
 
 var textureArray = [['material1', resourcePath+'g1.png'], ['material2', resourcePath+'g2.png'], ['material3', resourcePath+'g3.png'], ['material4', resourcePath+'g4.png']];
 

@@ -3,11 +3,9 @@
 <head>
     <meta name="viewport" content="user-scalable=no"/>
 
-
     <title>pixi.js example 1</title>
 
     <style>
-
         *{margin: 0;padding: 0;}
         #container {
             position: absolute;
@@ -51,16 +49,6 @@
             background: #18bbff;
         }
 
-        /*div.main {*/
-        /*width: 62.5%;*/
-        /*float: left;*/
-        /*}*/
-        /*div.aside {*/
-        /*width: 31.25%;*/
-        /*float: right;*/
-        /*}*/
-
-
     </style>
 
 
@@ -78,13 +66,13 @@
 
     </style>
 
-    <script src="public/js/pixi.js"></script>
-    <script src="public/js/vector.js"></script>
-    <script src="public/js/jquery.js"></script>
+    <script src="js/pixi.js"></script>
+    <script src="js/vector.js"></script>
+    <script src="js/jquery.js"></script>
 
+<!--  --------------------------------------- common dynaic backgoround set up  fro container Div ---------------------------------- -->
     <script>
         $(function(){
-            // 初始化 传入dom id
             var victor = new Victor("container", "output");
             var theme = [
                 ["#002c4a", "#005584"],
@@ -107,339 +95,12 @@
 </div>
 <div style="position: relative;">
     <div id ="bgdiv" style="position: absolute; width:100%;height:100%"></div>
-
     <div id = 'gamediv'style="position: absolute;"></div>
     <div id = 'introResultdiv'style="position: absolute;background-color: #e5004f; opacity: 0.95; margin:0px; padding: 0px; border: 0px "></div>
 </div>
-
-<audio id="bgmusic" src="public/sounds/bgmusic.mp3" loop="loop"></audio>
 <script>
-    PIXI.loader.add("public/jsons/wasteicon.json").load(finishLoad);
 
-
-    //------------------------------------------------------------------------------------------------------------------------------ sound play
-
-
-
-
-    var isgameover = false;
-
-
-
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
-
-
-    document.getElementById('bgmusic').play();
-
-
-    //	$('html').on('touchstart',function(){
-    //		backGround_sound.play();
-    //	});
-
-
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
-    backGround_sound.loop = true;
-    backGround_sound.volume = 0.1;
-    var levelUp_sound=  new Audio("public/sounds/levelUp.mp3");
-    var newRound_sound =  new Audio("public/sounds/newRound.mp3");
-    var rtClick_sound = new Audio("public/sounds/rtClick.mp3");
-    //    var wrClick_sound = new Audio("public/sounds/wrClick.mp3");
-    var wrClick_sound = new Audio("public/sounds/wrClick.mp3");
-    var gameOver_sound = new Audio("public/sounds/gameover.mp3");
-    var loose_sound = new Audio("public/sounds/lose.mp3");
-
-    var countDown_sound = new Audio("public/sounds/cound_down1.mp3");
-    var countDown_sound2 = new Audio("public/sounds/cound_down3.mp3");
-
-
-    var introResultstage = new PIXI.Container();
-    var  introResultdivrendergraphics = new PIXI.Graphics();
-    var introResultdivrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true});
-    introResultstage.addChild(introResultdivrendergraphics);
-    document.getElementById('introResultdiv').appendChild(introResultdivrenderer.view);
-    introResultdivrenderer.render(introResultstage);
-
-    var bgstage = new PIXI.Container();
-    var newlevel  = true;
-    var level = 1;
-    var newRound = false;
-
-    //-----------------------------------------------------
-    var bgrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true });
-    //	var bgrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
-
-    bgrenderer.backgroundColor = 0x005a9c;
-
-    document.getElementById('bgdiv').appendChild(bgrenderer.view);
-
-    var coinLogoPic = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
-
-    var coinLogoPic2 = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
-
-    coinLogoPic2.anchor.set(0.5);
-    coinLogoPic.anchor.set(0.5);
-
-    coinLogoPic.position.x = window.innerWidth/2+700;
-    coinLogoPic.position.y = window.innerHeight/2+190;
-
-    coinLogoPic.scale.set(0.9);
-    coinLogoPic2.position.x = -200;
-    coinLogoPic2.position.y = window.innerHeight/2+190;
-
-
-    coinLogoPic2.scale.set(0.9);
-
-    // let's create a moving shape
-    var bggraph = new PIXI.Graphics();
-
-    var intropagegraphic = new PIXI.Graphics();
-
-
-
-    //    bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+190);
-    //    bggraph.beginFill(0xfffff,0.2);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,400);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,350);
-    //    bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2,300);
-    //    bggraph.endFill();
-
-
-    //    bgstage.addChild(coinLogoPic);
-    //    bgstage.addChild(coinLogoPic2);
-    bgstage.addChild(intropagegraphic);
-    bgstage.addChild(bggraph);
-    bgrenderer.render(bgstage);
-
-
-
-    var round = 0;
-    var totalround = 3;
-    var totalScore =0;
-    var totlalError  =0;
-    var maxError=3;
-
-    var selectedRightColor = 0;
-    var totalRightColor = 4;
-    var totalRightColor2 = 4;
-
-    var maskSpriteArray  = new Array(4)
-
-
-    for(var i =0; i< maskSpriteArray.length; i++){
-        maskSpriteArray[i] = new Array(3);
-    };
-
-    //	for(var i =0;i<12;i++){
-    //
-    //		var tempsprit = new PIXI.Sprite();
-    //		tempsprit.tint = 0x000000;
-    //		tempsprit.height = window.innerWidth/5.2;
-    //		tempsprit.width = tempsprit.height;
-    //		maskSpriteArray.push();
-    //
-    //	}
-
-    //---------------------------------------------------------------------------- waste pic
-
-
-    var wasteCollection  =[[0,'public/imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'public/imgs/game1/plastic_bag.png','Plastic Bag'],[2,'public/imgs/game1/appple_core.png','Apple Core']]
-
-
-
-
-
-    function finishLoad(){
-//		backGround_sound.play();
-    }
-
-    var wasteCollectionOrder  = new Array(wasteCollection.length);
-
-    for(var i =0;i<wasteCollection.length; i++)
-    {
-        wasteCollectionOrder[i] = i;
-    }
-
-
-    for(i=0;i<48;i++){
-        var from = Math.floor(Math.random()*3);
-        var to = Math.floor(Math.random()*3);
-        var tmp = wasteCollectionOrder[from];
-        wasteCollectionOrder[from]=wasteCollectionOrder[to];
-        wasteCollectionOrder[to]=tmp;
-    }
-
-
-
-    //---------------------------------------------------------------------------- radom the colors
-
-    var chosenTiles = new Array();
-
-    for(i=0;i<12;i++){
-        chosenTiles.push(Math.floor(i/4));
-    }
-
-
-    // shuffle the chosen tiles
-    for(i=0;i<48;i++){
-        var from = Math.floor(Math.random()*12);
-        var to = Math.floor(Math.random()*12);
-        var tmp = chosenTiles[from];
-        chosenTiles[from]=chosenTiles[to];
-        chosenTiles[to]=tmp;
-    }
-
-
-    for(var i =0; i <12;i++){
-
-        var tempSprite = new  PIXI.Sprite();
-        tempSprite.height = window.innerWidth/5.2;
-        tempSprite.width = tempSprite.height;
-        if(chosenTiles[i]==0){                    // yellow
-            tempSprite.tint = 0xeee570;
-        }else if (chosenTiles[i]==1){            // greeen
-            tempSprite.tint = 0x2cc26f;
-        }else if(chosenTiles[i]==2){
-            tempSprite.tint = 0xff0000;          // red
-        };
-        maskSpriteArray[Math.floor(i/3)][Math.floor(i%3)] = tempSprite;
-    }
-
-
-    //---------------------------------------------------------------------------- waste pic
-
-    var bgPic = PIXI.Sprite.fromImage('public/imgs/game1/logo-nobg.png');
-    bgPic.anchor.set(0.5);
-
-    bgPic.position.x =  window.innerWidth+210;
-    bgPic.position.y =   window.innerHeight/2;
-
-
-    //-----------------------------------------------------------------
-
-    // Offset of each block
-    var offset = window.innerWidth/38;
-
-
-    // Basic settings
-    var objectNumber = 3;
-    //	var objectWidth = 180;
-
-    //	var objectWidth = window.innerWidth/5.2;
-
-    //	alert( window.innerWidth);
-    var objectWidth = 190;
-
-    var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
-    renderer.backgroundColor = 0x005a9c;
-
-    document.getElementById('gamediv').appendChild(renderer.view);
-
-    var stage = new PIXI.Container();
-
-    var graphics = new PIXI.Graphics();
-
-
-    //------------------------------------------------------------------------------ waste label board
-
-    var wastelabelboardWidth = (window.innerWidth)/1.35;
-    var wastelabelboardHight = (window.innerHeight)/4;
-
-
-    var wastelabelboardZoonstartX =  0;
-    var wastelabelboardZoonstartY = window.innerHeight/18;
-
-
-    graphics.moveTo(wastelabelboardZoonstartX, wastelabelboardZoonstartY);
-    graphics.beginFill(0x002866,0.9);
-    graphics.drawRoundedRect(wastelabelboardZoonstartX, wastelabelboardZoonstartY, wastelabelboardWidth, wastelabelboardHight, 10);
-    graphics.endFill();
-
-    //------------------------------------------------------------------------------ gameZone
-
-
-    var totalWidth = objectNumber*objectWidth+(objectNumber+1)*offset;
-    var totalHight  = (objectNumber+1)*objectWidth+(objectNumber+2)*offset;
-
-    // Position of the inside window
-    var gameZoonstartX = (window.innerWidth-totalWidth)/2;
-    var gameZooonstartY = (window.innerHeight-totalHight)/1.1;
-
-    // Initial position
-    graphics.moveTo(gameZoonstartX, gameZooonstartY);
-
-
-    graphics.beginFill(0x02316c,0.9);
-    graphics.drawRoundedRect(gameZoonstartX, gameZooonstartY, totalWidth, totalHight, 10);
-    graphics.endFill();
-
-
-    //------------------------------------------------------------------------------ time&&score bar
-    var timescoreBarHigh = 80;
-    var timescoreBarX = 0;
-    var timescoreBarY = wastelabelboardZoonstartY + wastelabelboardHight - timescoreBarHigh;
-    var timescoreBarWidth = wastelabelboardWidth;
-
-
-    graphics.moveTo(timescoreBarX, timescoreBarX);
-    graphics.beginFill(0x3498db,1);
-
-    graphics.drawRect(timescoreBarX, timescoreBarY, timescoreBarWidth, timescoreBarHigh);
-
-    graphics.endFill();
-
-
-
-
-    //------------------------------------------------------------------------------ waste board
-    var wasteboardRadius1 = (window.innerHeight)/7.1;
-    var wastboardRadius2 = (window.innerHeight)/6.25;
-
-    var wasteboardCenterX = wastelabelboardWidth ;
-    var wasteboardCenterY = wastelabelboardZoonstartY+(wastelabelboardHight/2);
-
-    graphics.moveTo(wasteboardCenterX, wasteboardCenterY);
-    graphics.beginFill(0xfacd89, 1);
-    graphics.drawCircle(wasteboardCenterX, wasteboardCenterY,wastboardRadius2);
-    graphics.endFill();
-
-    graphics.beginFill(0xffffff, 1);
-    graphics.drawCircle(wasteboardCenterX, wasteboardCenterY,wasteboardRadius1);
-    graphics.endFill();
-
-    //------------------------------------------------------------------------------ time text
-
-
-    var countingText = new PIXI.Text('Time Left: 60', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
-    countingText.anchor.x = 0.5;
-    countingText.anchor.y =0.5;
-    countingText.position.x = (wastelabelboardWidth - wastboardRadius2)/4;
-    countingText.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)+(timescoreBarHigh)/2;
-
-
-    //------------------------------------------------------------------------------ score text
-
-    var totalScoreText = new PIXI.Text('Total Score: 0', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
-
-    totalScoreText.anchor.x = 0.5;
-    totalScoreText.anchor.y = 0.5;
-    totalScoreText.position.x = countingText.position.x +(countingText.width)+40;
-    totalScoreText.position.y = countingText.position.y ;
-
-    //----------------------------------------------------------------------------------------------------------------------- set 3 seconds unmask tile
-
-
-    var style = {
-        font : 'bold italic 200px Arial',
-        fill : '#F7EDCA',
-        stroke : '#4a1850',
-        strokeThickness : 5,
-//        dropShadow : true,
-//        dropShadowColor : '#000000',
-//        dropShadowAngle : Math.PI / 6,
-//        dropShadowDistance : 6,
-        wordWrap : true,
-        wordWrapWidth : 440
-    };
+    //------------------------------------------------- tex tyle ----------------------------------------------------------------
 
     var gameoverStyle = {
         font : 'bold italic 200px Arial',
@@ -480,6 +141,319 @@
         wordWrapWidth : 440
     };
 
+
+    var style = {
+        font : 'bold italic 200px Arial',
+        fill : '#F7EDCA',
+        stroke : '#4a1850',
+        strokeThickness : 5,
+//        dropShadow : true,
+//        dropShadowColor : '#000000',
+//        dropShadowAngle : Math.PI / 6,
+//        dropShadowDistance : 6,
+        wordWrap : true,
+        wordWrapWidth : 440
+    };
+    var rubbishArray =[];
+    var rubbishVal = [0,1,0,1,0,1,0,1,0,1,0,0,0,0,1,1,1,1,2,2,2,2,2,2,2];
+    var rubbishName =
+            ["Coffee Cup","Coffee Cup","Can","Can","Glass Bottle","Glass Bottle",
+                "Plastic Bottles","Plastic Bottles","Food container","Food container",
+                "Magazine","Leaflet","Newspaper","Carton","Chip packet","Lolly wrapper",
+                "Soft plastic wrap","Plastic bag","Apple core","Banana peel","Sandwich","Hotdog","Tea bag","Paper towel","Tissue"];
+
+
+    for(var i = 1 ; i <= 25; i++) {
+
+        PIXI.loader.add("rubbish"+i, "imgs/game1/"+"rubbish"+i+".png");
+    }
+ //------------------------------------------------- load resourcd ----------------------------------------------------------------
+
+    var indexpic = 0;
+    var wastePic = new PIXI.Sprite.fromImage("imgs/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+    var wasteLabel;  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
+
+    var isloadfinish = false;
+
+    // all resource will be loaded. the resource path will be kept in game1 json
+    PIXI.loader.add("jsons/game1.json").load(finishLoad);
+    PIXI.loader.add("sounds/bgmusic.mp3");
+    PIXI.loader.add("sounds/levelUp.mp3");
+    PIXI.loader.add("sounds/rtClick.mp3");
+    PIXI.loader.add("sounds/gameover.mp3");
+    PIXI.loader.add("sounds/lose.mp3");
+    PIXI.loader.add("sounds/cound_down1.mp3");
+    PIXI.loader.add("sounds/cound_down3.mp3");
+    PIXI.loader.add("imgs/game1/start.png");
+    PIXI.loader.add("imgs/game1/game1level2intro.png");
+    PIXI.loader.add("imgs/game1/logo-nobg.png");
+    PIXI.loader.add("imgs/game1/game1level1intro.png");
+
+    for(var i =0; i<=8;i++ ){
+        PIXI.loader.add("imgs/game1/"+i+".png");
+    }
+
+
+
+
+
+
+    var round = 0;
+    //    var totalround = 3;
+    function finishLoad(){    // if finish laod rsource  set isloadfinish true intro page show.
+        //some function after the web has been loaded
+
+
+
+        for (var i = 1; i <= 25; i++) {
+            rubbishArray.push(new PIXI.Sprite.fromImage("imgs/game1/" + "rubbish" + i + ".png"));
+            rubbishArray[i - 1].anchor.set(0.5);
+            rubbishArray[i - 1].scale.x = 0.2;
+            rubbishArray[i - 1].scale.y = 0.2;
+            rubbishArray[i - 1].theVal = rubbishVal[i-1];
+            rubbishArray[i - 1].theName = rubbishName[i-1];
+        }
+        shuffleRubbishArry();
+
+
+
+         wastePic = rubbishArray[round]; // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+         wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
+
+            try_again_btn.scale.set(1.2);
+            back_btn.scale.set(1.2);
+            try_again_btn.position.x = window.innerWidth/2 ;
+            try_again_btn.position.y =window.innerHeight*0.8;
+
+            back_btn.position.x = window.innerWidth/2 ;
+            back_btn.position.y =try_again_btn.position.y+try_again_btn.height+50;
+
+        isloadfinish = true;
+    }
+
+
+    //------------------------------------------------- game parameters set up ----------------------------------------------------------------
+
+
+    // whether show the start page
+    var isstartshow = false;
+    // whether the game is start
+    var isgamesatrt = false;
+    // initially if is game doest not stat the into page will be displayed
+    var intropageshow = true;
+    // for micro animation loop control
+    var animationcount =0;
+    // set fist leve game time. 60 seconds
+    var gameTime = 60;
+    var isgameover = false;
+    var newlevel  = true;
+    var level = 1;
+    var newRound = false;
+
+
+    var totalScore =0;
+    var totlalError  =0;
+    var maxError=3;
+    var canPick = false;
+
+    // level1 start countdown seconds
+    var second= 4;
+    var timer;
+    var circlecount = 0;
+    var gameTimer;
+    // level2 start countdown seconds
+    var second2 = 4;
+    var timer2;
+
+    var selectedRightColor = 0;
+    var totalRightColor = 4;  // the number of level 1 right color in each round
+    var totalRightColor2 = 4;   // the number of level 2 right color in each round
+
+
+    var rottimes = -10; // for waste pic animation
+    var isReverse = false;  // for waste pic animation
+
+//    var rubbishArray =[];
+    // origianl waste type value array   0 recycle 1 waste
+
+    //------------------------------------------------- music set up ----------------------------------------------------------------
+
+    var backGround_sound = new Audio("sounds/bgmusic.mp3");
+    var backGround_sound = new Audio("sounds/bgmusic.mp3");
+    backGround_sound.loop = true;
+    var levelUp_sound=  new Audio("sounds/levelUp.mp3");
+    var newRound_sound =  new Audio("sounds/newRound.mp3");
+    var rtClick_sound = new Audio("sounds/rtClick.mp3");
+    //    var wrClick_sound = new Audio("sounds/wrClick.mp3");
+    var wrClick_sound = new Audio("sounds/wrClick.mp3");
+    var gameOver_sound = new Audio("sounds/gameover.mp3");
+    var loose_sound = new Audio("sounds/lose.mp3");
+    var countDown_sound = new Audio("sounds/cound_down1.mp3");
+    //last game countdown sound
+    var countDown_sound2 = new Audio("sounds/cound_down3.mp3");
+
+    backGround_sound.loop = true;
+
+    //----------------------------------------------  introResultdiv  basic set up -----------------------------------------------------
+    // for introResultdiv container
+    var introResultstage = new PIXI.Container();
+    // for introResultdiv animation
+    var  introResultdivrendergraphics = new PIXI.Graphics();
+    // for introResultdiv render
+    var introResultdivrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true});
+    introResultstage.addChild(introResultdivrendergraphics);
+    document.getElementById('introResultdiv').appendChild(introResultdivrenderer.view);
+    introResultdivrenderer.render(introResultstage);
+
+
+    //----------------------------------------------- bgdiv basic set up  for background animation -----------------------------------------
+    var bgstage = new PIXI.Container();
+    var bgrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true });
+    //	var bgrenderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
+
+    bgrenderer.backgroundColor = 0x005a9c;
+
+    document.getElementById('bgdiv').appendChild(bgrenderer.view);
+
+    // 2 background coin pic. They are not necessary
+    var coinLogoPic = PIXI.Sprite.fromImage("imgs/game1/logo-nobg.png");
+    var coinLogoPic2 = PIXI.Sprite.fromImage("imgs/game1/logo-nobg.png");
+
+    coinLogoPic2.anchor.set(0.5);
+    coinLogoPic.anchor.set(0.5);
+
+    coinLogoPic.position.x = window.innerWidth/2+700;
+    coinLogoPic.position.y = window.innerHeight/2+190;
+
+    coinLogoPic.scale.set(1.2);
+    coinLogoPic2.position.x = -200;
+    coinLogoPic2.position.y = window.innerHeight/2+190;
+
+    coinLogoPic2.scale.set(0.9);
+
+    // let's create a moving shape
+    var bggraph = new PIXI.Graphics();
+    bgstage.addChild(bggraph);
+    bgstage.addChild(coinLogoPic);
+    bgrenderer.render(bgstage);
+
+//---------------------------------------------------------------------------- waste pic
+
+// the total waste types&&icons
+//   var rubbishArray =[ [0,'imgs/game1/plastic_bottle_empty.png','Plastic Bottle'],[1,'imgs/game1/plastic_bag.png','Plastic Bag'],[2,'imgs/game1/appple_core.png','Apple Core']]
+
+
+//---------------------------------------------------------------------------- random the waste the order
+
+   function shuffleRubbishArry(){
+
+    // shuffle the waste order
+    for(i=0;i<48;i++){
+        var from = Math.floor(Math.random()*25);
+        var to = Math.floor(Math.random()*25);
+        var tmp = rubbishArray[from];
+        rubbishArray[from]=rubbishArray[to];
+        rubbishArray[to]=tmp;
+    }
+   }
+
+
+    //---------------------------------- game element set up -------------------------------
+
+    // Offset of each block
+    var offset = window.innerWidth/38;
+    // Basic settings
+    var objectNumber = 3;
+    var objectWidth = 190;
+
+    var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
+    renderer.backgroundColor = 0x005a9c;
+
+    document.getElementById('gamediv').appendChild(renderer.view);
+
+    var stage = new PIXI.Container();
+    var graphics = new PIXI.Graphics();
+
+
+    //------------------------------------------------------------------------------ waste label board
+
+    var wastelabelboardWidth = (window.innerWidth)/1.35;
+    var wastelabelboardHight = (window.innerHeight)/4;
+    var wastelabelboardZoonstartX =  0;
+    var wastelabelboardZoonstartY = window.innerHeight/18;
+
+    graphics.moveTo(wastelabelboardZoonstartX, wastelabelboardZoonstartY);
+    graphics.beginFill(0x002866,0.9);
+    graphics.drawRect(wastelabelboardZoonstartX, wastelabelboardZoonstartY, wastelabelboardWidth, wastelabelboardHight, 10);
+    graphics.endFill();
+
+
+    //------------------------------------------------------------------------------ gameZone
+
+    var totalWidth = objectNumber*objectWidth+(objectNumber+1)*offset;
+    var totalHight  = (objectNumber+1)*objectWidth+(objectNumber+2)*offset;
+
+    // Position of the inside window
+    var gameZoonstartX = (window.innerWidth-totalWidth)/2;
+    var gameZooonstartY = (window.innerHeight-totalHight)/1.1;
+
+    // Initial position
+    graphics.moveTo(gameZoonstartX, gameZooonstartY);
+    graphics.beginFill(0x02316c,0.9);
+    graphics.drawRoundedRect(gameZoonstartX, gameZooonstartY, totalWidth, totalHight, 10);
+    graphics.endFill();
+
+    //------------------------------------------------------------------------------ time&&score bar
+    var timescoreBarHigh = 80;
+    var timescoreBarX = 0;
+    var timescoreBarY = wastelabelboardZoonstartY + wastelabelboardHight - timescoreBarHigh;
+    var timescoreBarWidth = wastelabelboardWidth;
+
+    graphics.moveTo(timescoreBarX, timescoreBarX);
+    graphics.beginFill(0x3498db,1);
+
+    graphics.drawRect(timescoreBarX, timescoreBarY, timescoreBarWidth, timescoreBarHigh);
+
+    graphics.endFill();
+
+
+    //------------------------------------------------------------------------------ waste board
+    var wasteboardRadius1 = (window.innerHeight)/7.1;
+    var wastboardRadius2 = (window.innerHeight)/6.25;
+
+    var wasteboardCenterX = wastelabelboardWidth ;
+    var wasteboardCenterY = wastelabelboardZoonstartY+(wastelabelboardHight/2);
+
+    graphics.moveTo(wasteboardCenterX, wasteboardCenterY);
+    graphics.beginFill(0xfacd89, 1);
+    graphics.drawCircle(wasteboardCenterX, wasteboardCenterY,wastboardRadius2);
+    graphics.endFill();
+
+    graphics.beginFill(0xffffff, 1);
+    graphics.drawCircle(wasteboardCenterX, wasteboardCenterY,wasteboardRadius1);
+    graphics.endFill();
+
+    //------------------------------------------------------------------------------ time text
+
+
+    var countingText = new PIXI.Text('Time Left: 60', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
+    countingText.anchor.x = 0.5;
+    countingText.anchor.y =0.5;
+    countingText.position.x = (wastelabelboardWidth - wastboardRadius2)/4;
+    countingText.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)+(timescoreBarHigh)/2;
+    countingText.text = 'Time Left: ' + Math.floor(gameTime);
+
+    //------------------------------------------------------------------------------ score text
+
+    var totalScoreText = new PIXI.Text('Score: 0', { font: '35px Arial', fill: '#f1c40f', align: 'center' });
+
+    totalScoreText.anchor.x = 0.5;
+    totalScoreText.anchor.y = 0.5;
+    totalScoreText.position.x = countingText.position.x +(countingText.width)+40;
+    totalScoreText.position.y = countingText.position.y ;
+
+    //----------------------------------------------------------------------------------------------------------------------- set countdown/commn text
+
     var richText = new PIXI.Text('',style);
     richText.anchor.x = 0.5;
     richText.anchor.y = 0.5;
@@ -488,164 +462,113 @@
     richText.alpha = 0.9;
 
 
+    //--------------------------- the gamediv include static game zone and some element s like time&&score&&waste&&wasste label -------------------------------------------------------
 
-    //    var second=5;
-    //    var timer;
-    //    function countdown5seconds()
-    //    {
-    //        second--;
-    //
-    //        if(second>=1)
-    //        {
-    //            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
-    //            richText.text = second;
-    //        }
-    //        else if (second == 0){
-    //
-    //            richText.text = "Start!"
-    //            timer = setTimeout('countdown5seconds()',1000);
-    //        }
-    //        else if (second < 0)
-    //        {
-    //
-    //            stage.removeChild(richText);
-    //            canPick = true;
-    //            clearTimeout(timer);
-    //        }
-    //    }
-    //
-    //    timer = countdown5seconds('countdown5seconds()',1000);
-
-
-    //----------------------------------------------------------------------------------place mask
-
-
-    var gamecontianer = new PIXI.Container();
-
-    var canPick = false;
-
-
-    var maskArray  = new Array();
-
-
-
+    // this 3 element will always displayed on screen while the waste pic,game element and wstelabel sometimes will be removed from the stage
+    // aste pic,game element and wstelabel  will be added into stage  in placeTiles()
+    // game time text
 
     stage.addChild(graphics);
     stage.addChild(totalScoreText);
     stage.addChild(countingText);
 
-    var indexpic = 0;
-    var wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
+    // richText should be added at last so as to be displayed on teh
+    stage.addChild(richText);
 
-
-
-
-    var wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
-
-    //----------------------------------------
-
-    var startshowcount =0;
-
-    var intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level1intro.png");
-
+    // ------------ initial first intropage
+    var intropage = PIXI.Sprite.fromImage("imgs/game1/game1level1intro.png");
     intropage.alpha= 0;
     intropage.anchor.set(0.5);
     intropage.x = window.innerWidth/2;
     intropage.y = window.innerHeight/2;
     intropage.scale.set(1.3);
-
     intropage.buttonMode = true;
     intropage.interactive = true;
 
-    var intropageshow = true;
-    var rottimes = -10;
-    var isReverse = false;
 
-    var isskip = false;
-    var isstartshow = false;
-    var isgamesatrt = false;
-    var isbackGroundsoundplay = true;
-    var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
 
-    var gameTime = 60;
-    countingText.text = 'Time Left: ' + Math.floor(gameTime);
-    stage.addChild(richText);
-    var second= 4;
-    var timer;
-    var circlecount = 0;
-    var gameTimer;
+    var try_again_btn_up_texture = PIXI.Texture.fromImage('imgs/try_again_up.png');
+    var try_again_btn_down_texture = PIXI.Texture.fromImage('imgs/try_again_down.png');
+    var back_btn_up_texture = PIXI.Texture.fromImage('imgs/back_up.png');
+    var back_btn_down_texture = PIXI.Texture.fromImage('imgs/back_down.png');
 
-    var second2 = 4;
-    var timer2;
 
-    //    placeTiles();
+    PIXI.loader.add("try_again_btn","imgs/try_again_up.png");
 
+    PIXI.loader.add("back_btn","imgs/back_up.png");
+
+    var try_again_btn = new PIXI.Sprite(try_again_btn_up_texture);
+    //    var try_again_down  = PIXI.Sprite.fromImage("imgs/try_again_down.png");
+
+    try_again_btn.buttonMode = true;
+    try_again_btn.interactive = true;
+    try_again_btn.anchor.set(0.5);
+
+
+    try_again_btn.mousedown = try_again_btn.touchstart = function(data){
+        rtClick_sound.play();
+        try_again_btn.texture = try_again_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+//        try_again_btn.tint = 0x000000;
+//        try_again_btn.alpah = 0.5;
+        location.href='/match_color';
+
+    }
+
+    var back_btn =  new PIXI.Sprite(back_btn_up_texture);
+
+    back_btn.buttonMode = true;
+    back_btn.interactive = true;
+
+    back_btn.anchor.set(0.5);
+
+
+
+
+    back_btn.mousedown = back_btn.touchstart = function(data){
+        rtClick_sound.play();
+        back_btn.texture = back_btn_down_texture;
+        introResultdivrenderer.render(introResultstage);
+        location.href='/game';
+
+    }
+
+    // ------------ initial start page intropage, currentlly it is only an interactive pic
+    var startPage = PIXI.Sprite.fromImage("imgs/game1/start.png");
+
+
+
+    //------------------------------------------------------------------------------
+    //------------------------   level1 main funciotn  -----------------------------
+    //------------------------------------------------------------------------------
 
     function placeTiles(){
+        rottimes =-10;
+        var maskArray  = new Array();
         var index =0;
         //------------------------------------------------------------------------------ waste board pic
 
-        indexpic  = wasteCollectionOrder[round];
-        wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
+        wastePic = rubbishArray[round];
         wastePic.anchor.x =0.5;
         wastePic.anchor.y =0.5;
-        wastePic.scale.set(1.1);
+//        wastePic.scale.set(0.3);
 
-//	wastePic.scale = 1;
+       //	wastePic.scale = 1;
 
         wastePic.position.x = wasteboardCenterX;
         wastePic.position.y = wasteboardCenterY;
 
         //------------------------------------------------------------------------------ waste label text
 
-        wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
+        wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '60px Constantia', fill : 0xFFFFFF, align : 'center center'});
         wasteLabel.anchor.x = 0.5;
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
 
-        var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
-
-//        var oneColor = Math.floor(Math.random()*6);
-//        var twoColor = Math.floor(Math.random()*7);
-
-//        totalRightColor  = 12 - oneColor - twoColor;
-
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
-
-
-
         newRound = false;
-//		var chosenTiles = new Array();
-
-//		for(i=0;i<12;i++){
-//			if(i< totalRightColor){
-//                chosenTiles.push(roundColor);
-//            }else if (i<totalRightColor+oneColor){
-//                if(roundColor==0){
-//                    chosenTiles.push(1)
-//                }
-//                if(roundColor==1){
-//                    chosenTiles.push(0)
-//                }
-//                if(roundColor==2){
-//                    chosenTiles.push(1)
-//                }
-//            }else if (i>=totalRightColor+oneColor){
-//
-//                if(roundColor==0){
-//                    chosenTiles.push(2)
-//                }
-//                if(roundColor==1){
-//                    chosenTiles.push(2)
-//                }
-//                if(roundColor==2){
-//                    chosenTiles.push(0)
-//                }
-//            }
-//		}
-//
 
         var chosenTiles = new Array();
 
@@ -667,8 +590,7 @@
         for (var j = 0; j <= 3; j++) {
             for (var i = 0; i < 3; i++) {
 
-
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('imgs/game1/'+chosenTiles[index]+'.png');
 
                 maskArray.push(tile);
 
@@ -697,7 +619,6 @@
                     // can I pick a tile?
                     if (canPick) {
 
-
                         if (!this.isSelected) {
 
 //						alert(this.theVal);
@@ -708,21 +629,15 @@
                             this.tint = 0xffffff;
                             this.alpha = 1;
 
+                            if (this.theVal == rubbishArray[round].theVal) {
 
-
-                            if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
-
-
-
-
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
                                 this.setTexture(texture);
 
 
                                 totalScore += 20;
-                                totalScoreText.text =  'Total Score: '+ totalScore;
-//							alert('pick red right!');
+                                totalScoreText.text =  'Score: '+ totalScore;
 
                                 selectedRightColor++;
                                 if (selectedRightColor != totalRightColor) {
@@ -730,63 +645,29 @@
                                     rtClick_sound.play();
                                 }
 
-//
-//                            alert('selectedRightColor '+selectedRightColor);
-
-//                            alert('totalRightColor '+totalRightColor);
-
-
                                 if (selectedRightColor == totalRightColor) {
-
-
 
                                     newRound_sound.play();
                                     selectedRightColor = 0;
                                     canPick= false;
 
                                     totlalError = 0;
-                                    richText.text = "Next roud!"
-
-                                    stage.addChild(richText);
 
                                     newRound = true;
 
                                     round++;
 
-
-//                                round = round%3;
-
                                     index=0;
                                     stage.removeChildren(3, stage.children.length);
 
-
-                                    round = round%3;
-//													if(round == 3){
-//
-//														levelUp_sound.play();
-//
-//														canPick = false;
-//														newlevel = true;
-//														level = 2;
-//														round = 0;
-//														totlalError = 0;
-//														newRound= false;
-//														stage.removeChildren(3, stage.children.length);
-//
-//													}
-
+                                    round = round%24;
 
                                 }
 
                             }
                             else {
 
-
-
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
-
-
-//							backGround_sound.play();
+                           var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 3)+'.png');
 
                                 selectedTile.setTexture(texture);
 
@@ -802,25 +683,17 @@
                                     backGround_sound.pause();
 
                                     loose_sound.play();
-//								richText.text = "Game Over!"
-//								stage.addChild(richText);
-//								renderer.render(stage);
+
                                     canPick = false;
 
                                     clearTimeout(gameTimer);
 
                                     isgamesatrt = false;
-
-
-
                                     isgameover= true;
-                                    circlecount = 0;
+
                                     document.getElementById('introResultdiv').style.display = "block";
 
                                     introResultstage.addChild(introResultdivrendergraphics);
-
-                                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
 
 
                                 }
@@ -852,14 +725,19 @@
         }, 1000);
     }
 
+    //------------------------------------------------------------------------------
+    //------------------------   level2 main funciotn  -----------------------------
+    //------------------------------------------------------------------------------
 
     function placeTiles2(){
+        rottimes =-10;
+        var maskArray  = new Array();
         var index =0;
         newRound = false;
         //------------------------------------------------------------------------------ waste board pic
 
-        indexpic  = wasteCollectionOrder[round];
-        wastePic = PIXI.Sprite.fromImage(wasteCollection[wasteCollectionOrder[round]][1]);
+
+        wastePic = rubbishArray[round];
         wastePic.anchor.x =0.5;
         wastePic.anchor.y =0.5;
 
@@ -870,16 +748,11 @@
 
         //------------------------------------------------------------------------------ waste label text
 
-        wasteLabel = new PIXI.Text(wasteCollection[indexpic][2],{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});
+        wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '60px Constantia', fill : 0xFFFFFF, align : 'center center'});
         wasteLabel.anchor.x = 0.5;
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
-
-        var roundColor = wasteCollection[wasteCollectionOrder[round]][0];
-
-
-
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
@@ -893,8 +766,6 @@
 
         }
 
-
-
         // shuffle the chosen tiles
         for(i=0;i<48;i++){
             var from = Math.floor(Math.random()*12);
@@ -907,7 +778,7 @@
         for (var j = 0; j <= 3; j++) {
             for (var i = 0; i < 3; i++) {
 
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('imgs/game1/'+chosenTiles[index]+'.png');
 
                 maskArray.push(tile);
 
@@ -947,18 +818,16 @@
                             this.tint = 0xffffff;
                             this.alpha = 1;
 
+                            if (this.theVal == rubbishArray[round].theVal) {
 
 
-                            if (this.theVal == wasteCollection[wasteCollectionOrder[round]][0]) {
-
-
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 6)+'.png');
 
                                 this.setTexture(texture);
 
 
                                 totalScore += 20;
-                                totalScoreText.text =  'Total Score: '+ totalScore;
+                                totalScoreText.text =  'Score: '+ totalScore;
 //							alert('pick red right!');
 
                                 selectedRightColor++;
@@ -984,7 +853,7 @@
 
                                     canPick = false;
 
-                                    round = round%3;
+                                    round = round%24;
                                     index=0;
 
 
@@ -996,7 +865,7 @@
                                 wrClick_sound.play();
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
+                                var texture = PIXI.Texture.fromImage('imgs/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
 
@@ -1004,40 +873,24 @@
 
                                 totlalError ++;
 
-//							if(totlalError >= maxError){
-//
-//								richText.text = "Game Over!"
-//
-//								isgameover = true;
-//								circlecount =0;
-//								stage.addChild(richText);
-//								renderer.render(stage);
-//								canPick = false;
-//
-//							}
-
-
                                 if(totlalError< maxError) {
                                     wrClick_sound.play();
                                 }
 
                                 if(totlalError >= maxError) {
+
                                     countDown_sound2.pause();
                                     backGround_sound.pause();
 
                                     loose_sound.play();
-//								richText.text = "Game Over!"
-//								stage.addChild(richText);
-//								renderer.render(stage);
+
                                     canPick = false;
 
                                     clearTimeout(gameTimer);
 
                                     isgamesatrt = false;
+                                    isgameover= true;
 
-
-                                    isgameover = true;
-                                    circlecount = 0;
                                     document.getElementById('introResultdiv').style.display = "block";
 
                                     introResultstage.addChild(introResultdivrendergraphics);
@@ -1072,43 +925,49 @@
     }
 
 
-    //----------------------------------------------------------------------------------------------------------------------- level2 countdown
+    //----------------------------------------------------------------------------------------------------------------------- level1 countdown funciton
 
 
-    function countdown5seconds()
+    function level1countdownseconds()
     {
         second--;
         if(second>5&&second<=7)
         {
             richText.setStyle(style);
-            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
+            timer = setTimeout('level1countdownseconds()',1000);
             richText.text = "Level 1";
         }else if(second>3&&second<=5)
         {
             richText.setStyle(style2);
-            timer = setTimeout('countdown5seconds()',1000);//调用自身实现
+            timer = setTimeout('level1countdownseconds()',1000);
             richText.text = "According to the waste";
         }
         else if (second>0&&second<=3){
-            countDown_sound.play();
+
+            if(second ==3){
+                countDown_sound.play();
+            }
             richText.setStyle(style);
             richText.text = second;
-            timer = setTimeout('countdown5seconds()',1000);
+            timer = setTimeout('level1countdownseconds()',1000);
         }else if (second == 0)
         {
             richText.setStyle(style);
             richText.text = "Go!"
-
-
-            timer = setTimeout('countdown5seconds()',1000);
+            timer = setTimeout('level1countdownseconds()',1000);
         }
         else if (second < 0)
         {
+            // start counting  level1 game tiem ( 60 seconds)
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
+
+            // remove count down text
             stage.removeChild(richText);
 
+            // place level 1 game zone
             placeTiles();
 
+            // clear timer
             clearTimeout(timer);
         }
     }
@@ -1117,7 +976,6 @@
 
     function countdown3seconds()
     {
-
 
         second2--;
         if(second2>7&&second2<=9)
@@ -1148,6 +1006,7 @@
 
         }else if(second2<0){
             gameTime = 60;
+            richText.text = 60;
             stage.removeChild(richText);
             gameTimer = countdown60secondsgametime('countdown60secondsgametime()',1000);
             newRound = true;
@@ -1157,9 +1016,8 @@
         }
     }
 
-    //----------------------------------------------------------------------------------------------------------------------- set 30 seconds game time
 
-
+    //----------------------------------------------------------------------------------------------------------------------- this is game time timer
 
     function countdown60secondsgametime() {
 
@@ -1169,153 +1027,251 @@
         {
             countingText.text = 'Time Left: '+gameTime;
 
-
-            if (gameTime == 0){
-
-                if(level ==2){
-                    richText.text = "Time Up!"
-                    backGround_sound.pause();
-                    isgameover = true;
-
-                    isgamesatrt = false;
-
-                    stage.addChild(richText);
-                    renderer.render(stage);
-                    canPick = false;
-
-                }
+            if (gameTime == 0)  // if a level game time up, go into next level
+            {
                 if(level ==1){
-                    richText.text = "Next Level"
-                    stage.addChild(richText);
-                    renderer.render(stage);
-                    canPick = false;
-                    level ++;
-
-
-                    isgamesatrt = false;
-                    newRound = false;
+                richText.text = "Next Level"     // show next level 1 second
+                }else if (level ==2){
+                    richText.text = "Time UP"
                 }
-
+                stage.addChild(richText);
+                canPick = false;                   // do not allow to pick color block anymore
             }
-
+            renderer.render(stage);
             gameTimer = setTimeout('countdown60secondsgametime()',1000);
         }
         if(gameTime == -1 )
         {
-            if (level==2) {
 
-                if(isgameover==true){
-                    circlecount = 0;
-                    backGround_sound.pause();
+            if(level==1){
+            stage.removeChildren(3, stage.children.length);
+            isgamesatrt = false;              // stop game
+            newRound = false;                 // reset newRound
+            newlevel=true;                     // reset new level
 
-                    document.getElementById('introResultdiv').style.display = "block";
-
-                    introResultstage.addChild(introResultdivrendergraphics);
-
-                }else {
-
-
-                    canPick = false;
-                    circlecount = 0;
-                    round = 0;
-                    totlalError = 0;
-                    newRound = false;
-
-                    startshowcount = 0;
-                    stage.removeChildren(3, stage.children.length);
+            canPick=false;
+            round = 0;
+            totlalError = 0;
+            selectedRightColor =0;
 
 
-//
-
-                    document.getElementById('introResultdiv').style.display = "block";
-
-                    intropageshow = true;
-
-                    introResultstage.addChild(introResultdivrendergraphics);
-
-                    intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level2intro.png");
-
-                    intropage.anchor.set(0.5);
-                    intropage.x = window.innerWidth / 2;
-                    intropage.y = window.innerHeight / 2;
-                    intropage.scale.set(1.3);
-
-                    intropage.buttonMode = true;
-                    intropage.interactive = true;
-                    introResultstage.addChild(intropage);
+            level++;                            // next level
+            document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
 
 
-                    clearTimeout(gameTimer);
-                }
+            intropage = PIXI.Sprite.fromImage("imgs/game1/game1level2intro.png");
+            intropage.alpha= 0;
+
+            introResultstage.addChild(introResultdivrendergraphics);  // add animation engine
+
+            intropageshow = true;
+
+            }else if (level ==2 ){
+
+                backGround_sound.pause();
+                animationcount = 0;
+//                stage.removeChildren(0, stage.children.length);
+                isgamesatrt = false;              // stop game
+                newRound = false;                 // reset newRound
+                newlevel=true;                     // reset new level
+
+                round = 0;
+                totlalError = 0;
+                selectedRightColor =0;
+
+
+                level=1;   //reset level
+                document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
+                introResultstage.addChild(introResultdivrendergraphics);
+                isgamesatrt = false;
+                isgameover = true;
+
             }
+            clearTimeout(gameTimer);
         }
 
     }
 
-
-
-    //----------------------------------------------------------------------------------------------------------------------- set rounder chekcer
-
-    //
-    //    var roundTimer;
-    //    function roundTimerChecker() {
-    //
-    //        gameTimer = setTimeout('roundTimerChecker()',1000);
-    //    }
-    //	//stage.addChild(bgPic);
-    //    roundTimer = roundTimerChecker('roundTimerChecker()',1000);
-
-
-
-
+    //---------------------------------------------    start page event
     startPage.mousedown = startPage.touchstart = function(data){
         if(level==1) {
-            countDown_sound.play();
+            // display level1 countdown music
+                countDown_sound.play();
         }else if(level ==2){
-            newlevel = true;
+
+            isgamesatrt = true;
             countDown_sound2.play();
             // palce second level sound
         }
         introResultdivrendergraphics.clear();
-        introResultstage.removeChild(introResultdivrendergraphics);
-        introResultstage.removeChild(startPage);
+        introResultstage.removeChildren(0,introResultstage.children.length);
         introResultdivrenderer.render(introResultstage)
+        // hide the introResultdiv DIV
         document.getElementById('introResultdiv').style.display="none";
-        intropageshow = false;
-        isskip  = false;
+        // start game
         isgamesatrt = true;
 
     }
 
-    var isstop = true;
-    //	var time1 = new date();
-    renderer.render(stage);
-    var count = 0;
     animate();
     function animate() {
 
-        if(isgamesatrt){
+        if(!isgamesatrt){  // if game is not stat or gameover
+
+            if(intropageshow){  // if show intropageshow
+
+                    if( Math.sin(animationcount)* 2000<=900) {  // before intropage micro animation
+                        // satr micro animation
+                        intropage.alpha += 0.2;
+                        introResultdivrendergraphics.clear();
+                        introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+                        introResultdivrendergraphics.drawCircle(-20, 0, Math.abs(Math.sin(animationcount)) * 1500);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                        introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.abs(Math.sin(animationcount * 1.5)) * 2600);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount+=0.1;
+                    }else  // after the microanimation thow intropage
+                    {
+                       // end micro anmimation add game intro page
+
+                        intropage.anchor.set(0.5);
+                        intropage.x = window.innerWidth/2;
+                        intropage.y = window.innerHeight/2;
+                        intropage.scale.set(1.3);
+
+                        intropage.buttonMode = true;
+                        intropage.interactive = true;
+
+                        // add ingtropage click event
+
+                        intropage.mousedown = intropage.touchstart = function (data) {
+
+                            if(level ==1) // if  level1 paly backgrould music
+                            {
+                                backGround_sound.play();
+                            }
+                            // remove this intro pic
+                            introResultstage.removeChild(intropage);
+                            introResultdivrenderer.render(introResultstage);
+                            // show start page
+                            isstartshow = true;
+                        }
+
+                        introResultstage.addChild(intropage);
+
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount = 0;
+                        intropageshow= false;
+                    }
+               }
+
+            if(!intropageshow&&isstartshow)   // finish show intropage then show start screen
+              {
+                    if (Math.sin(animationcount*1.5) * 2000 < 1200) {  // before startpage show  micro animation first
+                        introResultdivrendergraphics.clear();
+                        introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+                        introResultdivrendergraphics.drawCircle(-100, 0, Math.sin(animationcount*2.5) * 1400);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                        introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.sin(animationcount * 1.6) * 1200);
+                        //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
+                        introResultdivrendergraphics.endFill();
+                        introResultdivrenderer.render(introResultstage);
+                        animationcount += 0.2;
+                    } else {   // after the microanimation thow startpage
+
+                        //reset animation count
+                        animationcount = 0;
+
+                        startPage.anchor.set(0.5);
+                        startPage.x = window.innerWidth/2;
+                        startPage.y = window.innerHeight/2;
+                        startPage.scale.set(1.3);
+
+                        startPage.buttonMode = true;
+                        startPage.interactive = true;
+                        introResultstage.addChild(startPage);
+                        introResultdivrenderer.render(introResultstage);
+                        isstartshow= false;
+                    }
+            }
+
+            if (!intropageshow&&!isstartshow&&isgameover)  // shwo game over screen
+            {
+                // shwo micro animation
+
+                if( Math.sin(animationcount)<=0.4) {
+
+                    introResultdivrendergraphics.clear();
+                    introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
+//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
+                    introResultdivrendergraphics.drawCircle(window.innerWidth/2, -80, Math.abs(Math.sin(animationcount)) * 1800);
+                    introResultdivrendergraphics.endFill();
+                    introResultdivrendergraphics.beginFill(0x00306f, 0.95);
+                    introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight, Math.abs(Math.sin(animationcount * 1.5)) * 1800);
+                    //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
+                    introResultdivrendergraphics.endFill();
+
+                    introResultdivrenderer.render(introResultstage);
+                    animationcount += 0.2;
+                }else{
+                    introResultstage.addChild(try_again_btn);
+                    introResultstage.addChild(back_btn);
+
+                    isgameover = false;
+
+                    setTimeout(function () {
+
+                        var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
+                        gameoveText.anchor.set(0.5);
+
+                        gameoveText.y = window.innerHeight/2-270;
+                        gameoveText.x = window.innerWidth/2;
+
+                        introResultstage.addChild(gameoveText);
+                        introResultdivrenderer.render(introResultstage);
+                        //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
+
+                    }, 1000);
+
+                    setTimeout(function () {
+
+                        var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
+                        resluText.anchor.set(0.5);
+
+                        resluText.y = window.innerHeight/2+150;
+                        resluText.x = window.innerWidth/2;
+
+                        introResultstage.addChild(resluText);
+                        introResultdivrenderer.render(introResultstage);
+                        //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
+
+                    }, 2000);
+
+
+                }
+            }
+        }
+        else if(isgamesatrt){
 
             if (level == 1) {
                 if(newlevel){
 
                     newRound = false;
                     newlevel = false;
-                    timer = countdown5seconds('countdown5seconds()',1000);
-
+                    timer = level1countdownseconds('level1countdownseconds()',1000);
 
                 }else{
 
-
-                    if (newRound) {
-                        //                                    stage.removeChildren(3, stage.children.length);
+              if (newRound) {
                         placeTiles();
                         renderer.render(stage);
                     }
 
                 }
             }else if (level==2){
-
 
 
                 if(newlevel){
@@ -1336,163 +1292,21 @@
             }
         }
 
-
-
-
-
-        if(intropageshow && !isgameover){
-            if( Math.sin(circlecount)* 2000>700){
-                intropageshow= false;
-
-                intropage.mousedown = intropage.touchstart = function (data) {
-
-
-                    if(level ==1) {
-                        backGround_sound.play();
-                    }
-
-
-
-                    introResultstage.removeChild(intropage);
-
-
-                    introResultdivrenderer.render(introResultstage);
-
-                    isskip = true;
-
-//										document.getElementById('introResultdiv').style.display="none";
-//										intropageshow = false;
-
-
-//										introResultdivrenderer.render(introResultstage);
-                }
-
-
-                introResultstage.addChild(intropage);
-                introResultdivrenderer.render(introResultstage);
-
-
-            }
-            intropage.alpha +=0.3 ;
-            introResultdivrendergraphics.clear();
-            introResultdivrendergraphics.beginFill(0x0598f2,0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-            introResultdivrendergraphics.drawCircle(-20,0,Math.abs(Math.sin(circlecount))* 1500);
-            introResultdivrendergraphics.endFill();
-            introResultdivrendergraphics.beginFill(0x00306f,0.95);
-            introResultdivrendergraphics.drawCircle(window.innerWidth+150,window.innerHeight - 200,Math.abs(Math.sin(circlecount*1.5))* 2600);
-            //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-            introResultdivrendergraphics.endFill();
-
-            introResultdivrenderer.render(introResultstage);
-
-        }
-
-        if (isskip&&!isstartshow) {
-
-
-            if (Math.sin(startshowcount*1.5) * 2000 < 1200) {
-                introResultdivrendergraphics.clear();
-                introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-                introResultdivrendergraphics.drawCircle(-100, 0, Math.sin(startshowcount*2.5) * 1400);
-                introResultdivrendergraphics.endFill();
-                introResultdivrendergraphics.beginFill(0x00306f, 0.95);
-                introResultdivrendergraphics.drawCircle(window.innerWidth + 150, window.innerHeight - 200, Math.sin(startshowcount * 1.6) * 1200);
-                //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-                introResultdivrendergraphics.endFill();
-
-                introResultdivrenderer.render(introResultstage);
-
-                startshowcount += 0.2;
-            } else {
-                startPage.anchor.set(0.5);
-                startPage.x = window.innerWidth/2;
-                startPage.y = window.innerHeight/2;
-                startPage.scale.set(1.3);
-
-                startPage.buttonMode = true;
-                startPage.interactive = true;
-                introResultstage.addChild(startPage);
-
-                introResultdivrenderer.render(introResultstage);
-            }
-        }
-
-
-
-        if(!intropageshow && isgameover&&isstop){
-
-            if( Math.sin(circlecount)<=0.4) {
-
-
-                introResultdivrendergraphics.clear();
-                introResultdivrendergraphics.beginFill(0x0598f2, 0.85);
-//								introResultdivrendergraphics.drawCircle(window.innerWidth/2,window.innerHeight/2, Math.sin(circlecount)* 2000);
-                introResultdivrendergraphics.drawCircle(window.innerWidth/2, -80, Math.abs(Math.sin(circlecount)) * 1800);
-                introResultdivrendergraphics.endFill();
-                introResultdivrendergraphics.beginFill(0x00306f, 0.95);
-                introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight, Math.abs(Math.sin(circlecount * 1.5)) * 1800);
-                //							introResultdivrendergraphics.drawCircle(window.innerWidth/2, window.innerHeight/2+190,Math.cos(circlecount)* 100);
-                introResultdivrendergraphics.endFill();
-
-                introResultdivrenderer.render(introResultstage);
-            }else{
-                isstop = false;
-
-
-
-                setTimeout(function () {
-
-                    var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
-                    gameoveText.anchor.set(0.5);
-
-                    gameoveText.y = window.innerHeight/2-270;
-                    gameoveText.x = window.innerWidth/2;
-
-                    introResultstage.addChild(gameoveText);
-                    introResultdivrenderer.render(introResultstage);
-                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
-                }, 1000);
-
-                setTimeout(function () {
-
-                    var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
-                    resluText.anchor.set(0.5);
-
-                    resluText.y = window.innerHeight/2+150;
-                    resluText.x = window.innerWidth/2;
-
-                    introResultstage.addChild(resluText);
-                    introResultdivrenderer.render(introResultstage);
-                    //selectedTile.setTexture(PIXI.Texture.fromImage(selectedTile.theVal-3));
-
-                }, 2000);
-
-
-            }
-
-        }
-
         circlecount+=0.1;
         bggraph.clear();
 
-        bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
-//                            bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+200);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 430+ Math.cos(circlecount) *10);
-        bggraph.endFill();
-
-        bggraph.beginFill(0x0098db,0.4);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 360+ Math.cos(circlecount)* 6);
-        bggraph.endFill();
-
-        bggraph.beginFill(0x0098db,0.8);
-        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 330+ Math.cos(circlecount)* 3);
-        bggraph.endFill();
-
-
-
+//        bggraph.beginFill(0x74d0f8,(0.2 + Math.cos(circlecount)*0.2));
+////                            bggraph.moveTo(window.innerWidth/2,window.innerHeight/2+200);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 430+ Math.cos(circlecount) *10);
+//        bggraph.endFill();
+//
+//        bggraph.beginFill(0x0098db,0.4);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 360+ Math.cos(circlecount)* 6);
+//        bggraph.endFill();
+//
+//        bggraph.beginFill(0x0098db,0.8);
+//        bggraph.drawCircle(window.innerWidth/2, window.innerHeight/2+190, 330+ Math.cos(circlecount)* 3);
+//        bggraph.endFill();
 
         // just for fun, let's rotate mr rabbit a little
         coinLogoPic.rotation += 0.002;
@@ -1521,6 +1335,7 @@
 
         if((rottimes%20)<0){
 
+
             wastePic.rotation  += 0.02;
         }else if(rottimes%20>=0){
 
@@ -1546,9 +1361,6 @@
     }
 
 </script>
-
-
-
 
 </body>
 </html>
