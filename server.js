@@ -34,6 +34,9 @@ app.use(express.static('public'));
 // Set up the view engine
 app.set('view engine', 'ejs');
 
+// pass passport for configuration
+require('./config/passport')(passport);
+
 // load our routes and pass in our app
 require('./routes/routes.js')(app, passport);
 
