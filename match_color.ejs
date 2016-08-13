@@ -68,7 +68,7 @@
 
     <script src="js/pixi.js"></script>
     <script src="js/vector.js"></script>
-    <script src="js/jquery.js"></script>
+    <script src="js/jquery-2.2.4.min.js"></script>
 
 <!--  --------------------------------------- common dynaic backgoround set up  fro container Div ---------------------------------- -->
     <script>
@@ -166,38 +166,38 @@
 
     for(var i = 1 ; i <= 25; i++) {
 
-        PIXI.loader.add("rubbish"+i, "public/imgs/game1/"+"rubbish"+i+".png");
+        PIXI.loader.add("rubbish"+i, "img/game1/"+"rubbish"+i+".png");
     }
  //------------------------------------------------- load resourcd ----------------------------------------------------------------
 
     var indexpic = 0;
-    var wastePic = new PIXI.Sprite.fromImage("public/imgs/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+    var wastePic = new PIXI.Sprite.fromImage("img/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
     var wasteLabel;  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
     var isloadfinish = false;
 
     // all resource will be loaded. the resource path will be kept in game1 json
-    PIXI.loader.add("public/jsons/game1.json").load(finishLoad);
-    PIXI.loader.add("public/sounds/bgmusic.mp3");
-    PIXI.loader.add("public/sounds/levelUp.mp3");
-    PIXI.loader.add("public/sounds/rtClick.mp3");
-    PIXI.loader.add("public/sounds/gameover.mp3");
-    PIXI.loader.add("public/sounds/lose.mp3");
-    PIXI.loader.add("public/sounds/cound_down1.mp3");
-    PIXI.loader.add("public/sounds/cound_down3.mp3");
-    PIXI.loader.add("public/imgs/game1/start.png");
-    PIXI.loader.add("public/imgs/game1/game1level2intro.png");
-    PIXI.loader.add("public/imgs/game1/logo-nobg.png");
-    PIXI.loader.add("public/imgs/game1/game1level1intro.png");
+    PIXI.loader.add("json/game1.json").load(finishLoad);
+    PIXI.loader.add("img/sounds/bgmusic.mp3");
+    PIXI.loader.add("img/sounds/levelUp.mp3");
+    PIXI.loader.add("img/sounds/rtClick.mp3");
+    PIXI.loader.add("img/sounds/gameover.mp3");
+    PIXI.loader.add("img/sounds/lose.mp3");
+    PIXI.loader.add("img/sounds/cound_down1.mp3");
+    PIXI.loader.add("img/sounds/cound_down3.mp3");
+    PIXI.loader.add("img/game1/start.png");
+    PIXI.loader.add("img/game1/game1level2intro.png");
+    PIXI.loader.add("img/game1/logo-nobg.png");
+    PIXI.loader.add("img/game1/game1level1intro.png");
 
     for(var i =0; i<=8;i++ ){
-        PIXI.loader.add("public/imgs/game1/"+i+".png");
+        PIXI.loader.add("img/game1/"+i+".png");
     }
 
 
 
     // ------------ initial first intropage
-    var intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level1intro.png");
+    var intropage = PIXI.Sprite.fromImage("img/game1/game1level1intro.png");
 
 
 
@@ -223,7 +223,7 @@
 
 
         for (var i = 1; i <= 25; i++) {
-            rubbishArray.push(new PIXI.Sprite.fromImage("public/imgs/game1/" + "rubbish" + i + ".png"));
+            rubbishArray.push(new PIXI.Sprite.fromImage("img/game1/" + "rubbish" + i + ".png"));
             rubbishArray[i - 1].anchor.set(0.5);
 
 
@@ -305,19 +305,19 @@
 
     //------------------------------------------------- music set up ----------------------------------------------------------------
 
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
-    var backGround_sound = new Audio("public/sounds/bgmusic.mp3");
+    var backGround_sound = new Audio("img/sounds/bgmusic.mp3");
+    var backGround_sound = new Audio("img/sounds/bgmusic.mp3");
     backGround_sound.loop = true;
-    var levelUp_sound=  new Audio("public/sounds/levelUp.mp3");
-    var newRound_sound =  new Audio("public/sounds/newRound.mp3");
-    var rtClick_sound = new Audio("public/sounds/rtClick.mp3");
+    var levelUp_sound=  new Audio("img/sounds/levelUp.mp3");
+    var newRound_sound =  new Audio("img/sounds/newRound.mp3");
+    var rtClick_sound = new Audio("img/sounds/rtClick.mp3");
     //    var wrClick_sound = new Audio("sounds/wrClick.mp3");
-    var wrClick_sound = new Audio("public/sounds/wrClick.mp3");
-    var gameOver_sound = new Audio("public/sounds/gameover.mp3");
-    var loose_sound = new Audio("public/sounds/lose.mp3");
-    var countDown_sound = new Audio("public/sounds/cound_down1.mp3");
+    var wrClick_sound = new Audio("img/sounds/wrClick.mp3");
+    var gameOver_sound = new Audio("img/sounds/gameover.mp3");
+    var loose_sound = new Audio("img/sounds/lose.mp3");
+    var countDown_sound = new Audio("img/sounds/cound_down1.mp3");
     //last game countdown sound
-    var countDown_sound2 = new Audio("public/sounds/cound_down3.mp3");
+    var countDown_sound2 = new Audio("img/sounds/cound_down3.mp3");
 
     backGround_sound.loop = true;
 
@@ -343,8 +343,8 @@
     document.getElementById('bgdiv').appendChild(bgrenderer.view);
 
     // 2 background coin pic. They are not necessary
-    var coinLogoPic = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
-    var coinLogoPic2 = PIXI.Sprite.fromImage("public/imgs/game1/logo-nobg.png");
+    var coinLogoPic = PIXI.Sprite.fromImage("img/game1/logo-nobg.png");
+    var coinLogoPic2 = PIXI.Sprite.fromImage("img/game1/logo-nobg.png");
 
     coinLogoPic2.anchor.set(0.5);
     coinLogoPic.anchor.set(0.5);
@@ -510,15 +510,15 @@
 
 
 
-    var try_again_btn_up_texture = PIXI.Texture.fromImage('public/imgs/try_again_up.png');
-    var try_again_btn_down_texture = PIXI.Texture.fromImage('public/imgs/try_again_down.png');
-    var back_btn_up_texture = PIXI.Texture.fromImage('public/imgs/back_up.png');
-    var back_btn_down_texture = PIXI.Texture.fromImage('public/imgs/back_down.png');
+    var try_again_btn_up_texture = PIXI.Texture.fromImage('img/try_again_up.png');
+    var try_again_btn_down_texture = PIXI.Texture.fromImage('img/try_again_down.png');
+    var back_btn_up_texture = PIXI.Texture.fromImage('img/back_up.png');
+    var back_btn_down_texture = PIXI.Texture.fromImage('img/back_down.png');
 
 
-    PIXI.loader.add("try_again_btn","public/imgs/try_again_up.png");
+    PIXI.loader.add("try_again_btn","img/try_again_up.png");
 
-    PIXI.loader.add("back_btn","public/imgs/back_up.png");
+    PIXI.loader.add("back_btn","img/back_up.png");
 
     var try_again_btn = new PIXI.Sprite(try_again_btn_up_texture);
     //    var try_again_down  = PIXI.Sprite.fromImage("imgs/try_again_down.png");
@@ -534,7 +534,7 @@
         introResultdivrenderer.render(introResultstage);
 //        try_again_btn.tint = 0x000000;
 //        try_again_btn.alpah = 0.5;
-        location.href='/match_color';
+        location.href='match_color.ejs';
 
     }
 
@@ -552,12 +552,12 @@
         rtClick_sound.play();
         back_btn.texture = back_btn_down_texture;
         introResultdivrenderer.render(introResultstage);
-        location.href='/game';
+        location.href='gamepage.ejs';
 
     }
 
     // ------------ initial start page intropage, currentlly it is only an interactive pic
-    var startPage = PIXI.Sprite.fromImage("public/imgs/game1/start.png");
+    var startPage = PIXI.Sprite.fromImage("img/game1/start.png");
 
 
 
@@ -613,7 +613,7 @@
         for (var j = 0,l=1; j <= 3; j++,l++) {
             for (var i=0,k = 1; i < 3; i++,k++) {
 
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('img/game1/'+chosenTiles[index]+'.png');
 
                 tile.width = window.innerWidth*0.1949;
                 tile.height = window.innerWidth*0.1949;
@@ -660,7 +660,7 @@
 
                             if (this.theVal == rubbishArray[round].theVal) {
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 6)+'.png');
 
 
 
@@ -704,7 +704,7 @@
                             }
                             else {
 
-                           var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
+                           var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
 
@@ -820,7 +820,7 @@
         for (var j = 0,l=1; j <= 3; j++,l++) {
             for (var i=0,k = 1; i < 3; i++,k++) {
 
-                var tile = PIXI.Sprite.fromImage('public/imgs/game1/'+chosenTiles[index]+'.png');
+                var tile = PIXI.Sprite.fromImage('img/game1/'+chosenTiles[index]+'.png');
 
 
                 tile.width = window.innerWidth*0.1949;
@@ -869,7 +869,7 @@
                             if (this.theVal == rubbishArray[round].theVal) {
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 6)+'.png');
+                                var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 6)+'.png');
 
                                 texture.width = window.innerWidth*0.1949;
                                 texture.height = window.innerWidth*0.1949;
@@ -916,7 +916,7 @@
                                 wrClick_sound.play();
 
 
-                                var texture = PIXI.Texture.fromImage('public/imgs/game1/'+(selectedTile.theVal + 3)+'.png');
+                                var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
                                 texture.width = window.innerWidth*0.1949;
@@ -1113,7 +1113,7 @@
             document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
 
 
-            intropage = PIXI.Sprite.fromImage("public/imgs/game1/game1level2intro.png");
+            intropage = PIXI.Sprite.fromImage("img/game1/game1level2intro.png");
             intropage.alpha= 0;
 
             introResultstage.addChild(introResultdivrendergraphics);  // add animation engine
