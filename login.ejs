@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Login </title>
+
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+
+</head>
+<body>
+	<div class="container">
+
+		<div class="row" >
+			<div class="col-sm-12" style="text-align: center; margin-bottom: 15px">
+				<img src="img/logo.png">
+			</div>
+		</div>
+
+		<!-- show any messages that come back with authentication
+		<% if (message.length > 0) { %>
+		<div class="alert alert-danger" style="text-align: center;"><%= message %></div>
+		<% } %>
+		-->
+
+		<!-- LOGIN FORM -->
+		<form action="./login.ejs" method="post">
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">User Name:</label>
+						<input type="text" id="username" name="username" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">Password:</label>
+						<input type="password" id="password" name="password" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="col-sm-6" style="padding-top: 2%;padding-left: 1%;padding-right: 1%;">
+						<button type="submit" class="btn btn-warning" style="width: 100%;">Log in</button>
+					</div>
+			</form>
+					<!-- The button to direct to the Sign up FORM -->
+					<div class="col-sm-6" style="padding-top: 2%;padding-right: 1%;padding-left: 1%;">
+						<button type="button" class="btn btn-success" style="width: 100%;" onclick="SignUpPage()">Sing up</button>
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+			<!-- The button to direct to the guide page, skip Log in and Sign up-->
+			<button type="button" class="btn btn-skip" id="skip" onclick="skip()">SKIP</button>
+
+	</div>
+
+	<script>
+	function SignUpPage() {
+		window.location.href='./signup.ejs';
+	}
+
+	function skip() {
+		window.location.href='./gamepage.ejs';
+	}
+	</script>
+
+</body>
+</html>

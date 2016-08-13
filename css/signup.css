@@ -1,0 +1,21 @@
+.form-label{
+    text-align: right;
+    padding: 0px;
+}
+body{
+    background-color: #025b9e;
+}
+.container{
+    margin-top: 30%;
+}
+.form-group label{
+    font-size: 30px;
+}
+.form-group input{
+    font-size: 30px;
+    height: 60px;
+}
+.col-sm-8 button{
+    height: 60px;
+    font-size: 20px;
+}

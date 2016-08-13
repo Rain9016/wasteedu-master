@@ -1,0 +1,95 @@
+/* Shared Attributes */
+body {
+    background-image: url("../img/game_bg.png");
+    background-size: cover;
+}
+
+.btn-game {
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    font-size: 40px;
+    border-style: solid;
+    border-width: 20px;
+    position: relative;
+    text-align: center;
+    overflow: hidden
+}
+.btn-game div {
+    border-radius: 50%;
+    height: 250px;
+    width: 250px;
+    position: absolute;
+    z-index: 80;
+}
+.btn-game span {
+    color: white;
+    position: absolute;
+    left: 30;
+    bottom: 50;
+    z-index: 120;
+    font-size: 50px;
+}
+
+/* The button of Coffee Cups */
+
+.btn-game-cups {
+    border-color: #c0e6fb;
+    background-color: #026cbb;
+}
+.btn-game-cups div {
+    background-color: #06b7ef;
+    bottom: 20%;
+    left: 15%;
+}
+
+.btn-game-cups:hover {}
+
+/* The button of Rubbish Rain */
+
+.btn-game-rain {
+    border-color: #c8fce0;
+    background-color: #36cf79;
+}
+.btn-game-rain div {
+    background-color: #09a24f;
+    bottom: 15%;
+    left: -10;
+}
+
+/* Left bottom */
+
+.btn-game-match {
+    border-color: #fdb4ab;
+    background-color: #fb8578;
+}
+.btn-game-match div {
+    background-color: #e85545;
+    bottom: 15%;
+    left: 8;
+}
+
+/* Right bottom */
+
+.btn-game-sort {
+    border-color: #f6eebd;
+    background-color: #fde26e;
+}
+.btn-game-sort div {
+    background-color: #f0c81e;
+    bottom: -10%;
+    left: 20;
+}
+
+/* Back btn */
+
+.btn-back {
+    background-color: #d58e54;
+    color: white;
+    height: 100px;
+    width: 250px;
+    font-size: 40;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

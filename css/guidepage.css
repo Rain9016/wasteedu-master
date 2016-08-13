@@ -1,0 +1,81 @@
+body{
+    background-color: #0b5c9a;
+}
+
+/* News btn */
+.btn-news{
+    transition: all 0.5s;
+    background: url("../img/news.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+    margin-top: 35%;
+}
+.btn-news:hover{
+    background: url("../img/news-click.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+}
+
+/* Game btn */
+.btn-game{
+    transition: all 0.5s;
+    background: url("../img/intro/game.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+    margin-top: 35%;
+}
+.btn-game:hover{
+    background: url("../img/intro/game-click.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+}
+
+/* Result btn */
+.btn-result{
+    transition: all 0.5s;
+    background: url("../img/intro/result.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+    margin-top: 35%;
+}
+.btn-result:hover{
+    background: url("../img/intro/result-click.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+}
+
+/* Result btn */
+.btn-comment{
+    transition: all 0.5s;
+    background: url("../img/intro/comment.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+    margin-top: 35%;
+}
+.btn-comment:hover{
+    background: url("../img/intro/comment.png") no-repeat;
+    height: 131px;
+    width: 131px;
+    border: 0px;
+}
+
+.content-block{
+    border-radius: 15px;
+    padding: 3% 3% 3% 3%;
+}
+
+.item-title{
+    font-size: 35px;
+    color: white;
+}
+.news-item{
+    font-size: 25px;
+    color: white;
+}

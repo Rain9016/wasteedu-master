@@ -1,0 +1,89 @@
+<html>
+<head>
+	<title> Sign Up </title>
+
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/signup.css">
+
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row" style="margin-top: 5%;margin-bottom: 5%;">
+			<div class="col-sm-12" style="text-align: center;">
+				<img src="imgs/logo.png">
+			</div>
+		</div>
+
+		<!-- show any messages that come back with authentication
+		<% if (message.length > 0) { %>
+		        <div class="alert alert-danger" style="text-align: center;"><%= message %></div>
+		<% } %>
+		-->
+
+		<!-- SIGNUP FORM -->
+		<form action="/signup.ejs" method="post">
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">User Name:</label>
+						<input id="username" name="username" type="text" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">Password:</label>
+						<input id="password" name="password" type="password" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">Confirm Password:</label>
+						<input type="password" class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label style="color: white;">E-mail:</label>
+						<input id="email" name="email" type="email" class="form-control" placeholder="xxxx@adelaide.edu.au">
+					</div>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8" style="padding-top: 2%;">
+					<button type="submit" class="btn btn-success" style="width: 100%;padding-top: 2%;padding-bottom: 2%;">Sign up</button>
+				</div>
+				<div class="col-sm-2"></div>
+			</div>
+		</form>
+
+	<!-- end container -->
+	</div>
+
+</body>
+</html>
