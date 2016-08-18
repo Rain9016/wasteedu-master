@@ -158,20 +158,21 @@
     var rubbishArray =[];
     var rubbishVal = [0,1,0,1,0,1,0,1,0,1,0,0,0,0,1,1,1,1,2,2,2,2,2,2,2];
     var rubbishName =
-            ["Coffee Cup","Coffee Cup","Can","Can","Glass Bottle","Glass Bottle",
+            ["  Coffee Cup  ","  Coffee Cup  ","     Can     ","     Can     "," Glass Bottle "," Glass Bottle ",
                 "Plastic Bottles","Plastic Bottles","Food container","Food container",
-                "Magazine","Leaflet","Newspaper","Carton","Chip packet","Lolly wrapper",
-                "Soft plastic wrap","Plastic bag","Apple core","Banana peel","Sandwich","Hotdog","Tea bag","Paper towel","Tissue"];
+                "  Magazine  ","   Leaflet   "," Newspaper ","    Carton    "," Chip packet ","Lolly wrapper",
+                "Soft plastic wrap"," Plastic bag "," Apple core "," Banana peel ","   Sandwich   ","    Hotdog    ","   Tea bag   "," Paper towel ","    Tissue    "];
 
 
     for(var i = 1 ; i <= 25; i++) {
 
         PIXI.loader.add("rubbish"+i, "img/game1/"+"rubbish"+i+".png");
     }
+    var startPage = PIXI.Sprite.fromImage("img/game1/start.png");
  //------------------------------------------------- load resourcd ----------------------------------------------------------------
 
     var indexpic = 0;
-    var wastePic = new PIXI.Sprite.fromImage("img/game1/" + "default_bin.png"); // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
+    var wastePic = new PIXI.Sprite.fromImage("img/game1/" + "default_bin.png");  // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
     var wasteLabel;  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
     var isloadfinish = false;
@@ -205,7 +206,6 @@
     //    var totalround = 3;
     function finishLoad(){    // if finish laod rsource  set isloadfinish true intro page show.
         //some function after the web has been loaded
-
 
         intropage.alpha= 0;
         intropage.anchor.set(0.5);
@@ -243,10 +243,14 @@
 
 
 
+
          wastePic = rubbishArray[round]; // waste pic must be add here because the micro animation will use wastePic so it can not be decleared in  placeTiles()
          wasteLabel = new PIXI.Text(rubbishArray[round].theName,{font : '80px Constantia', fill : 0xFFFFFF, align : 'center center'});  //  if a micro animition will be added into this element is must be decleared outside placeTiles()
 
-        wasteLabel.scale.set((wastelabelboardWidth-wasteboardRadius1)*0.9/wasteLabel.width);
+
+
+         wasteLabel.scale.set((wastelabelboardWidth-wasteboardRadius1)*0.9/wasteLabel.width);
+
 
             try_again_btn.scale.set(window.innerWidth*0.6/try_again_btn.width);
             back_btn.scale.set(window.innerWidth*0.6/back_btn.width);
@@ -254,7 +258,7 @@
             try_again_btn.position.y =window.innerHeight*0.8;
 
             back_btn.position.x = window.innerWidth/2 ;
-            back_btn.position.y =try_again_btn.position.y+try_again_btn.height+50;
+            back_btn.position.y =try_again_btn.position.y+try_again_btn.height+try_again_btn.height;
 
         isloadfinish = true;
     }
@@ -432,7 +436,7 @@
     graphics.endFill();
 
     //------------------------------------------------------------------------------ time&&score bar
-    var timescoreBarHigh = 80;
+    var timescoreBarHigh = wastelabelboardHight*0.2;
     var timescoreBarX = 0;
     var timescoreBarY = wastelabelboardZoonstartY + wastelabelboardHight - timescoreBarHigh;
     var timescoreBarWidth = wastelabelboardWidth;
@@ -478,8 +482,8 @@
 
     totalScoreText.anchor.x = 0.5;
     totalScoreText.anchor.y = 0.5;
-    totalScoreText.scale.set(timescoreBarHigh*0.5/countingText.height);
-    totalScoreText.position.x = countingText.position.x +(countingText.width)+40;
+    totalScoreText.scale.set(timescoreBarHigh*0.5/totalScoreText.height);
+    totalScoreText.position.x = countingText.position.x +(countingText.width)+totalScoreText.width/5;
     totalScoreText.position.y = countingText.position.y ;
 
     //----------------------------------------------------------------------------------------------------------------------- set countdown/commn text
@@ -557,7 +561,7 @@
     }
 
     // ------------ initial start page intropage, currentlly it is only an interactive pic
-    var startPage = PIXI.Sprite.fromImage("img/game1/start.png");
+
 
 
 
@@ -588,6 +592,10 @@
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
+
+        wasteLabel.scale.set((wastelabelboardWidth-wasteboardRadius1)*0.8/wasteLabel.width);
+
+
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
@@ -683,28 +691,36 @@
                                 if (selectedRightColor == totalRightColor) {
 
                                     newRound_sound.play();
-                                    selectedRightColor = 0;
-                                    canPick= false;
 
-                                    totlalError = 0;
 
-                                    newRound = true;
 
-                                    rottimes = -10;
+                                    setTimeout(function () {
 
-                                    round++;
+                                        selectedRightColor = 0;
+                                        canPick= false;
 
-                                    index=0;
-                                    stage.removeChildren(3, stage.children.length);
+                                        totlalError = 0;
 
-                                    round = round%24;
+                                        round++;
+
+                                        index=0;
+                                        stage.removeChildren(3, stage.children.length);
+
+                                        round = round%24;
+
+                                        newRound = true;
+
+                                    }, 100);
+
+
+
 
                                 }
 
                             }
                             else {
 
-                           var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 3)+'.png');
+                                var texture = PIXI.Texture.fromImage('img/game1/'+(selectedTile.theVal + 3)+'.png');
 
 
 
@@ -795,6 +811,8 @@
         wasteLabel.anchor.y = 0.5;
         wasteLabel.position.x = ((wastelabelboardWidth - wastboardRadius2))/2;
         wasteLabel.position.y = wastelabelboardZoonstartY + (wastelabelboardHight-timescoreBarHigh)/2;
+
+        wasteLabel.scale.set((wastelabelboardWidth-wasteboardRadius1)*0.9/wasteLabel.width);
 
         stage.addChild(wastePic);
         stage.addChild(wasteLabel);
@@ -894,18 +912,29 @@
                                     newRound_sound.play();
 
 
-                                    selectedRightColor = 0;
 
-                                    newRound = true;
 
-                                    stage.removeChildren(3, stage.children.length);
+                                    setTimeout(function () {
 
-                                    round++;
+                                        selectedRightColor = 0;
+                                        canPick= false;
 
-                                    canPick = false;
+                                        totlalError = 0;
 
-                                    round = round%24;
-                                    index=0;
+
+                                        round++;
+
+                                        index=0;
+                                        stage.removeChildren(3, stage.children.length);
+
+                                        round = round%24;
+
+                                        newRound = true;
+
+
+                                    }, 100);
+
+
 
 
                                 }
@@ -1111,14 +1140,16 @@
 
             level++;                            // next level
             document.getElementById('introResultdiv').style.display = "block"; // show introResultdiv Div
+                intropage = PIXI.Sprite.fromImage("img/game1/game1level2intro.png");
 
-
-            intropage = PIXI.Sprite.fromImage("img/game1/game1level2intro.png");
             intropage.alpha= 0;
 
             introResultstage.addChild(introResultdivrendergraphics);  // add animation engine
 
             intropageshow = true;
+
+//            startPage.scale.set(window.innerWidth/startPage.width);
+
 
             }else if (level ==2 ){
 
@@ -1245,8 +1276,11 @@
                         startPage.anchor.set(0.5);
                         startPage.x = window.innerWidth/2;
                         startPage.y = window.innerHeight/2;
-                        startPage.scale.set(window.innerWidth/startPage.width);
 
+
+                        if(level==1){
+                          startPage.scale.set(window.innerWidth*0.8/startPage.width);
+                        }
                         startPage.buttonMode = true;
                         startPage.interactive = true;
                         introResultstage.addChild(startPage);
@@ -1279,14 +1313,17 @@
 
                     isgameover = false;
 
+                    var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
+                    var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
+
                     setTimeout(function () {
 
-                        var gameoveText = new PIXI.Text('Game Over!',gameoverStyle);
-                        gameoveText.anchor.set(0.5);
+
+//                        gameoveText.anchor.set(0.5);
                         gameoveText.scale.set(window.innerWidth*0.6/gameoveText.width);
 
-                        gameoveText.y = window.innerHeight/2-270;
-                        gameoveText.x = window.innerWidth/2;
+                        gameoveText.y = window.innerHeight/8;
+                        gameoveText.x = (window.innerWidth - gameoveText.width)/2;
 
                         introResultstage.addChild(gameoveText);
                         introResultdivrenderer.render(introResultstage);
@@ -1296,11 +1333,11 @@
 
                     setTimeout(function () {
 
-                        var resluText = new PIXI.Text('Your final score is: '+ totalScore,style2);
+
                         resluText.anchor.set(0.5);
 
                         resluText.scale.set(window.innerWidth*0.6/resluText.width);
-                        resluText.y = window.innerHeight/2+150;
+                        resluText.y = gameoveText.y+gameoveText.height+window.innerHeight/8;
                         resluText.x = window.innerWidth/2;
 
                         introResultstage.addChild(resluText);
